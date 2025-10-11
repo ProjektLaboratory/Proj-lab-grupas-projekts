@@ -1,8 +1,10 @@
 # Proj-lab-grupas-projekts
 
 
+## Līdzīgo risinājumu pārskats
 
-## Tehnoloģiju steks
+
+## Konceptu modelis
 
 <img width="810" height="680" alt="image" src="https://github.com/user-attachments/assets/f9a1aace-b99a-4704-8478-d74f91dc5fe1" />
 
@@ -53,5 +55,8 @@ Menu "1"  -- "*" Dish
 <br>Dish "1"  -- "1" time_needed
 <br>Dish "*"  -- "1" Cuisine
 <br>
+
+
+## Tehnoloģiju steks
 <br>
 <br>@enduml

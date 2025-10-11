@@ -55,8 +55,9 @@ Menu "1"  -- "*" Dish
 <br>Dish "1"  -- "1" time_needed
 <br>Dish "*"  -- "1" Cuisine
 <br>
+<br>
+<br>@enduml
 
 
 ## Tehnoloģiju steks
-<br>
-<br>@enduml
+

@@ -5,6 +5,7 @@
 ## Līdzīgo risinājumu pārskats
 
 Samsung food: Meal Manager
+<br>
 <img src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-1.png" />
 
 <p float="left">
@@ -21,12 +22,14 @@ Samsung food: Meal Manager
 <br>
 
 Manage Meals
+<br>
 <img src="/images-for-similar-solution-comparison/Manage-Meals-image-1.png" />
 
 <p float="left">
-  <img src="/images-for-similar-solution-comparison/Manage-Meals-image-2.png" />
-  <img src="/images-for-similar-solution-comparison/Manage-Meals-image-3.png" />
+  <img width="499" height="302.5" src="/images-for-similar-solution-comparison/Manage-Meals-image-2.png" />
+  <img width="605.5" height="425.5"src="/images-for-similar-solution-comparison/Manage-Meals-image-3.png" />
 </p>
+
 
 Neder, jo
     1. tikai apskata produkta informāciju - Soosee, Open Food Facts

@@ -5,11 +5,11 @@
 ## Līdzīgo risinājumu pārskats
 
 Samsung food: Meal Manager
-<img src="/workspaces/Proj-lab-grupas-projekts/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-1.png" />
+<img src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-1.png" />
 
 <p float="left">
-  <img width="540" height="1044" src="/workspaces/Proj-lab-grupas-projekts/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-2.png" />
-  <img width="540" height="1041" src="/workspaces/Proj-lab-grupas-projekts/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-3.png" />
+  <img width="540" height="1044" src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-2.png" />
+  <img width="540" height="1041" src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-3.png" />
 </p>
 
 <br>
@@ -21,11 +21,11 @@ Samsung food: Meal Manager
 <br>
 
 Manage Meals
-<img src="/workspaces/Proj-lab-grupas-projekts/images-for-similar-solution-comparison/Manage-Meals-image-1.png" />
+<img src="/images-for-similar-solution-comparison/Manage-Meals-image-1.png" />
 
 <p float="left">
-  <img src="/workspaces/Proj-lab-grupas-projekts/images-for-similar-solution-comparison/Manage-Meals-image-2.png" />
-  <img src="/workspaces/Proj-lab-grupas-projekts/images-for-similar-solution-comparison/Manage-Meals-image-3.png" />
+  <img src="/images-for-similar-solution-comparison/Manage-Meals-image-2.png" />
+  <img src="/images-for-similar-solution-comparison/Manage-Meals-image-3.png" />
 </p>
 
 Neder, jo
@@ -92,4 +92,4 @@ Menu "1"  -- "*" Dish
 
 ## Tehnoloģiju steks
 
-<img width="280" height="801" src="/workspaces/Proj-lab-grupas-projekts/image-4.png">
+<img width="280" height="801" src="/image-4.png">

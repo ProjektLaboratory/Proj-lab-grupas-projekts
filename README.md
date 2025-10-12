@@ -4,30 +4,26 @@
 
 ## Līdzīgo risinājumu pārskats
 
-Samsung food: Meal Manager
+**Samsung food: Meal Manager**
 <br>
 <img src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-1.png" />
 
-<br>
-<p float="right">
-  <img width="486" height="939.6" src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-2.png" />
-  <img width="486" height="936.9" src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-3.png" />
+<p>
+  <img align="top" width="648" height="1252.8" src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-2.png" />
+  <img align="top" width="648" height="1249.2" src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-3.png" />
 </p>
 
-<br>
-<br>
-<br>
-<br>
+
 <br>
 <br>
 
-Manage Meals
+**Manage Meals**
 <br>
 <img src="/images-for-similar-solution-comparison/Manage-Meals-image-1.png" />
 
 <p float="left">
-  <img width="499" height="302.5" src="/images-for-similar-solution-comparison/Manage-Meals-image-2.png" />
-  <img width="605.5" height="425.5" src="/images-for-similar-solution-comparison/Manage-Meals-image-3.png" />
+  <img align="top" width="598" height="363" src="/images-for-similar-solution-comparison/Manage-Meals-image-2.png" />
+  <img align="top" width="726" height="510" src="/images-for-similar-solution-comparison/Manage-Meals-image-3.png" />
 </p>
 
 

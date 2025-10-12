@@ -9,8 +9,8 @@ Samsung food: Meal Manager
 <img src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-1.png" />
 
 <p float="left">
-  <img width="540" height="1044" src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-2.png" />
-  <img width="540" height="1041" src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-3.png" />
+  <img width="486" height="939.6" src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-2.png" />
+  <img width="486" height="936.9" src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-3.png" />
 </p>
 
 <br>

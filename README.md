@@ -3,6 +3,9 @@
 
 ## Līdzīgo risinājumu pārskats
 
+Samsung food: Meal Manager
+![alt text](image.png)
+![alt text](<Screenshot_20251012_145539_Samsung Food.jpg>) ![alt text](<Screenshot_20251012_145952_Samsung Food.jpg>)
 
 ## Konceptu modelis
 

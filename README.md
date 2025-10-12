@@ -7,6 +7,15 @@ Samsung food: Meal Manager
 ![alt text](image.png)
 ![alt text](<Screenshot_20251012_145539_Samsung Food.jpg>) ![alt text](<Screenshot_20251012_145952_Samsung Food.jpg>)
 
+Manage Meals
+![alt text](image-1.png)
+![alt text](image-2.png)
+![alt text](image-3.png)
+
+Neder, jo
+    1. tikai apskata produkta informāciju - Soosee, Open Food Facts
+    2. tikai sniedz informāciju par restorāniem - AllergyEats
+
 ## Konceptu modelis
 
 <img width="810" height="680" alt="image" src="https://github.com/user-attachments/assets/f9a1aace-b99a-4704-8478-d74f91dc5fe1" />

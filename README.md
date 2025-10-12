@@ -1,24 +1,42 @@
 # Proj-lab-grupas-projekts
 
 
+
 ## Līdzīgo risinājumu pārskats
 
 Samsung food: Meal Manager
-![alt text](image.png)
-![alt text](<Screenshot_20251012_145539_Samsung Food.jpg>) ![alt text](<Screenshot_20251012_145952_Samsung Food.jpg>)
+<img src="/workspaces/Proj-lab-grupas-projekts/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-1.png" />
+
+<p float="left">
+  <img width="540" height="1044" src="/workspaces/Proj-lab-grupas-projekts/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-2.png" />
+  <img width="540" height="1041" src="/workspaces/Proj-lab-grupas-projekts/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-3.png" />
+</p>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 Manage Meals
-![alt text](image-1.png)
-![alt text](image-2.png)
-![alt text](image-3.png)
+<img src="/workspaces/Proj-lab-grupas-projekts/images-for-similar-solution-comparison/Manage-Meals-image-1.png" />
+
+<p float="left">
+  <img src="/workspaces/Proj-lab-grupas-projekts/images-for-similar-solution-comparison/Manage-Meals-image-2.png" />
+  <img src="/workspaces/Proj-lab-grupas-projekts/images-for-similar-solution-comparison/Manage-Meals-image-3.png" />
+</p>
 
 Neder, jo
     1. tikai apskata produkta informāciju - Soosee, Open Food Facts
     2. tikai sniedz informāciju par restorāniem - AllergyEats
 
+
+
 ## Konceptu modelis
 
-<img width="810" height="680" alt="image" src="https://github.com/user-attachments/assets/f9a1aace-b99a-4704-8478-d74f91dc5fe1" />
+<img width="810" height="680" alt="image" src="https://github.com/user-attachments/assets/f9a1aace-b99a-4704-8478-d74f91dc5fe1" /> 
 
 <br>@startuml
 <br>skinparam linetype ortho
@@ -71,5 +89,7 @@ Menu "1"  -- "*" Dish
 <br>@enduml
 
 
+
 ## Tehnoloģiju steks
 
+<img width="280" height="801" src="/workspaces/Proj-lab-grupas-projekts/image-4.png">

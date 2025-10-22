@@ -91,4 +91,4 @@ Menu "1"  -- "*" Dish
 
 ## Tehnoloģiju steks
 
-<img width="280" height="801" src="/image-4.png">
+<img width="280" height="801" src="/tehnologiju_steks.png">

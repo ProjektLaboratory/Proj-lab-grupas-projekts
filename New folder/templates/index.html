@@ -1,0 +1,203 @@
+{% extends "home.html" %}
+
+{% block content %}
+<form action="/filter" method="post" class="filter-row">
+
+    <!-- Alergēni -->
+    <div class="filter-group">
+        <details>
+            <summary>Alergēni</summary>
+            <input type="text" class="search-box" placeholder="Meklēt alergēnu..." onkeyup="filterItems(this, 'alergeni-list')">
+            <div class="scroll-box" id="alergeni-list">
+                {% for a in alergeni %}
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="alergeni" value="{{ a }}"
+                            {% if selected_allergens and a in selected_allergens %}checked{% endif %}>
+                        {{ a }}
+                    </label>
+                {% endfor %}
+            </div>
+        </details>
+    </div>
+
+    <!-- Produkti -->
+    <div class="filter-group">
+        <details>
+            <summary>Produkti</summary>
+            <input type="text" class="search-box" placeholder="Meklēt produktu..." onkeyup="filterItems(this, 'produkti-list')">
+            <div class="scroll-box" id="produkti-list">
+                {% for p in produkti %}
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="produkti" value="{{ p }}"
+                            {% if selected_products and p in selected_products %}checked{% endif %}>
+                        {{ p }}
+                    </label>
+                {% endfor %}
+            </div>
+        </details>
+    </div>
+
+    <!-- Laiks -->
+    <div class="filter-group">
+        <details>
+            <summary>Laiks</summary>
+            <div class="scroll-box">
+                {% for t in cooking_time %}
+                    <label class="checkbox-item">
+                        <input type="radio" name="cooking_time" value="{{ t }}"
+                            {% if selected_time and t == selected_time %}checked{% endif %}>
+                        {{ t }} min
+                    </label>
+                {% endfor %}
+            </div>
+        </details>
+    </div>
+
+    <!-- Ēdienreizes tips -->
+    <div class="filter-group">
+        <details>
+            <summary>Ēdienreizes tips</summary>
+            <div class="scroll-box">
+                {% for tip in tips %}
+                    <label class="checkbox-item">
+                        <input type="radio" name="tips" value="{{ tip }}"
+                            {% if selected_tip and tip == selected_tip %}checked{% endif %}>
+                        {{ tip }}
+                    </label>
+                {% endfor %}
+            </div>
+        </details>
+    </div>
+
+    <!-- Virtuve -->
+    <div class="filter-group">
+        <details>
+            <summary>Virtuve</summary>
+            <div class="scroll-box">
+                {% for v in virtuve %}
+                    <label class="checkbox-item">
+                        <input type="radio" name="virtuve" value="{{ v }}"
+                            {% if selected_virtuve and v == selected_virtuve %}checked{% endif %}>
+                        {{ v }}
+                    </label>
+                {% endfor %}
+            </div>
+        </details>
+    </div>
+
+    <button type="submit" class="filter-button">Filtrēt</button>
+</form>
+
+{% if selected_allergens or selected_products or selected_time or selected_tip or selected_virtuve %}
+    <hr>
+    <h3>Izvēlētie filtri:</h3>
+    <p><strong>Alergēni:</strong> {{ selected_allergens or 'Nav' }}</p>
+    <p><strong>Produkti:</strong> {{ selected_products or 'Nav' }}</p>
+    <p><strong>Laiks:</strong> {{ selected_time or 'Nav' }}</p>
+    <p><strong>Ēdienreizes tips:</strong> {{ selected_tip or 'Nav' }}</p>
+    <p><strong>Virtuve:</strong> {{ selected_virtuve or 'Nav' }}</p>
+{% endif %}
+
+<style>
+    .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 15px;
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .filter-group {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 6px 10px;
+        width: 200px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    details summary {
+        font-weight: bold;
+        font-size: 16px;
+        color: #333;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    details summary::after {
+        content: "▼";
+        font-size: 12px;
+        transition: transform 0.2s;
+    }
+
+    details[open] summary::after {
+        transform: rotate(-180deg);
+    }
+
+    summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .search-box {
+        width: 100%;
+        margin-top: 6px;
+        padding: 5px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+    .scroll-box {
+        max-height: 150px;
+        overflow-y: auto;
+        margin-top: 8px;
+        border-top: 1px solid #eee;
+        padding-top: 6px;
+    }
+
+    .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 0;
+        cursor: pointer;
+    }
+
+    .checkbox-item input {
+        transform: scale(1.1);
+    }
+
+    .filter-button {
+        background-color: #0078d4;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 16px;
+        cursor: pointer;
+        align-self: flex-end;
+        transition: 0.2s;
+        height: fit-content;
+    }
+
+    .filter-button:hover {
+        background-color: #005ea0;
+    }
+</style>
+
+<script>
+function filterItems(input, listId) {
+    const filter = input.value.toLowerCase();
+    const list = document.getElementById(listId);
+    const labels = list.getElementsByTagName('label');
+    for (let label of labels) {
+        const text = label.textContent.toLowerCase();
+        label.style.display = text.includes(filter) ? 'flex' : 'none';
+    }
+}
+</script>
+{% endblock %}

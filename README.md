@@ -8,10 +8,10 @@
 <br>
 <img src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-1.png" />
 
-<p>
-  <img align="top" width="648" height="1252.8" src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-2.png" />
-  <img align="top" width="648" height="1249.2" src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-3.png" />
-</p>
+<div align="top">
+  <img width="648" height="1252.8" src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-2.png" />
+  <img width="648" height="1249.2" src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-3.png" />
+</div>
 
 
 <br>
@@ -21,10 +21,10 @@
 <br>
 <img src="/images-for-similar-solution-comparison/Manage-Meals-image-1.png" />
 
-<p float="left">
-  <img align="top" width="598" height="363" src="/images-for-similar-solution-comparison/Manage-Meals-image-2.png" />
-  <img align="top" width="726" height="510" src="/images-for-similar-solution-comparison/Manage-Meals-image-3.png" />
-</p>
+<div align="top">
+  <img width="598" height="363" src="/images-for-similar-solution-comparison/Manage-Meals-image-2.png" />
+  <img width="726" height="510" src="/images-for-similar-solution-comparison/Manage-Meals-image-3.png" />
+</div>
 
 
 Neder, jo

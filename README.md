@@ -5,7 +5,7 @@
 ## Līdzīgo risinājumu pārskats
 
 **Samsung food: Meal Manager**
-<br>
+<br></br>
 <img src="/images-for-similar-solution-comparison/Samsung-Food-Meal-Planner-image-1.png" />
 
 <div align="top">
@@ -14,11 +14,11 @@
 </div>
 
 
-<br>
-<br>
+<br></br>
+<br></br>
 
 **Manage Meals**
-<br>
+<br></br>
 <img src="/images-for-similar-solution-comparison/Manage-Meals-image-1.png" />
 
 <div align="top">

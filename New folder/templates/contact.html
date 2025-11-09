@@ -1,5 +1,184 @@
 {% extends "home.html" %}
 {% block content %}
-<h2>Kontakt informācija</h2>
-<p>You can contact us at: info@limpa.lv</p>
+
+<div class="container my-5" style="max-width:980px;">
+
+  <!-- PROJEKTA VIRSRADSTS un oficiālais e-pasts -->
+  <div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+      <h1 id="projectName" class="display-6">Limpa</h1>
+      <p class="text-muted mb-0">Personalized meal generator by preferences, cuisine type, and ingredients — fast, smart, and customized.</p>
+    </div>
+    <div class="text-end">
+      <p class="mb-1">Official email:</p>
+      <a id="projectEmail" href="mailto:info@limpa.lv" class="btn btn-outline-primary btn-sm">info@limpa.lv</a>
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- REKVIZĪTI (laukos ievadi un saglabā localStorage) -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">Company Details</h6>
+
+          <div class="mb-2">
+            <label class="form-label small">Company Name</label>
+            <input id="bizName" class="form-control form-control-sm" placeholder="LLC / Name">
+          </div>
+          <div class="mb-2">
+            <label class="form-label small">Registration No.</label>
+            <input id="bizReg" class="form-control form-control-sm" placeholder="123456789">
+          </div>
+          <div class="mb-2">
+            <label class="form-label small">VAT No.</label>
+            <input id="bizVAT" class="form-control form-control-sm" placeholder="LV12345678901">
+          </div>
+          <div class="mb-2">
+            <label class="form-label small">Address</label>
+            <input id="bizAddr" class="form-control form-control-sm" placeholder="Street, City">
+          </div>
+          <div class="mb-2">
+            <label class="form-label small">Phone</label>
+            <input id="bizPhone" class="form-control form-control-sm" placeholder="+371 2...">
+          </div>
+
+          <div class="d-grid mt-2">
+            <button id="saveBiz" class="btn btn-primary btn-sm">Save Company Details</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- KONTAKTFORMA (mazāka, zemāk un neuzkrītoši) -->
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h5 class="mb-2">Contact Us</h5>
+
+          <form id="contactForm" onsubmit="fakeSend(event)">
+            <div class="row g-2">
+              <div class="col-md-6">
+                <label class="form-label small">Name</label>
+                <input id="inputName" type="text" class="form-control form-control-sm" placeholder="Your name" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small">Email</label>
+                <input id="inputEmail" type="email" class="form-control form-control-sm" placeholder="your@email.com" required>
+              </div>
+            </div>
+
+            <div class="mb-2 mt-2">
+              <label class="form-label small">Subject</label>
+              <input id="inputSubject" class="form-control form-control-sm" placeholder="Order / Question">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small">Message</label>
+              <textarea id="inputMessage" class="form-control form-control-sm" rows="4" placeholder="Type your message here..." required></textarea>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button type="button" id="prefillProfile" class="btn btn-outline-secondary btn-sm">Fill from Profile</button>
+              <button type="submit" class="btn btn-primary btn-sm flex-grow-1">Send</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- row -->
+
+</div>
+
+<!-- success toast -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">Thank you! This is a demo, messages are not actually sent.</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+// localStorage keys
+const LS_BIZ = 'limpa_biz';
+const LS_PROFILE = 'limpa_profile_v1';
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadBiz();
+  loadProfileToInputs();
+
+  document.getElementById('saveBiz').addEventListener('click', saveBiz);
+  document.getElementById('prefillProfile').addEventListener('click', prefillFromProfile);
+});
+
+function loadBiz(){
+  // load stored or apply sensible defaults
+  const stored = JSON.parse(localStorage.getItem(LS_BIZ) || '{}');
+  const defaults = {
+    name: 'Limpa',
+    reg: '',
+    vat: '',
+    addr: '',
+    phone: ''
+  };
+  const b = Object.assign({}, defaults, stored);
+
+  document.getElementById('bizName').value = b.name || '';
+  document.getElementById('bizReg').value = b.reg || '';
+  document.getElementById('bizVAT').value = b.vat || '';
+  document.getElementById('bizAddr').value = b.addr || '';
+  document.getElementById('bizPhone').value = b.phone || '';
+
+  document.getElementById('projectName').textContent = 'Limpa';
+  const emailEl = document.getElementById('projectEmail');
+  emailEl.href = 'mailto:info@limpa.lv';
+  emailEl.textContent = 'info@limpa.lv';
+}
+
+function saveBiz(){
+  const b = {
+    name: document.getElementById('bizName').value.trim() || 'Limpa',
+    reg: document.getElementById('bizReg').value.trim(),
+    vat: document.getElementById('bizVAT').value.trim(),
+    addr: document.getElementById('bizAddr').value.trim(),
+    phone: document.getElementById('bizPhone').value.trim()
+  };
+  localStorage.setItem(LS_BIZ, JSON.stringify(b));
+  const toast = new bootstrap.Toast(document.getElementById('successToast'));
+  document.querySelector('#successToast .toast-body').textContent = 'Company details saved locally.';
+  toast.show();
+  setTimeout(()=> document.querySelector('#successToast .toast-body').textContent = 'Thank you! This is a demo, messages are not actually sent.', 1600);
+}
+
+function loadProfileToInputs(){
+  const prof = JSON.parse(localStorage.getItem(LS_PROFILE) || '{}');
+  document.getElementById('inputName').value = prof.name || '';
+  document.getElementById('inputEmail').value = prof.email || '';
+}
+
+function prefillFromProfile(){
+  loadProfileToInputs();
+  const toast = new bootstrap.Toast(document.getElementById('successToast'));
+  document.querySelector('#successToast .toast-body').textContent = 'Filled from saved profile (locally).';
+  toast.show();
+  setTimeout(()=> document.querySelector('#successToast .toast-body').textContent = 'Thank you! This is a demo, messages are not actually sent.', 1600);
+}
+
+function fakeSend(e){
+  e.preventDefault();
+  const toast = new bootstrap.Toast(document.getElementById('successToast'));
+  toast.show();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.textContent = 'Sent ✓';
+  setTimeout(()=> { btn.disabled = false; btn.textContent = 'Send'; }, 2000);
+}
+</script>
+
 {% endblock %}

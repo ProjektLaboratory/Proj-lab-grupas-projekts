@@ -1,0 +1,5 @@
+{% extends "home.html" %}
+{% block content %}
+<h2>Favourite Recipes</h2>
+<p>Your saved recipes will appear here.</p>
+{% endblock %}

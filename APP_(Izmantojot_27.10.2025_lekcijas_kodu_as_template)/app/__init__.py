@@ -13,13 +13,14 @@ def create_app():
         db.create_all()
 
     # Register web blueprints (split by entity)
+    """"
     from .web.authors import authors_bp
     from .web.books import books_bp
     from .web.orders import orders_bp
     app.register_blueprint(authors_bp)  # /authors
     app.register_blueprint(books_bp)  # /books
     app.register_blueprint(orders_bp)  # /orders
-
+    """"
     # Register api endpoints
     from .api import api_bp
     app.register_blueprint(api_bp)
@@ -28,9 +29,11 @@ def create_app():
     def home():
         return render_template(
             "home.html",
-            author_count=Author.query.count(),
-            book_count=Book.query.count(),
-            order_count=Order.query.count(),
-        )
+            """"
+                author_count=Author.query.count(),
+                book_count=Book.query.count(),
+                order_count=Order.query.count(),
+            """"
+            )
 
     return app

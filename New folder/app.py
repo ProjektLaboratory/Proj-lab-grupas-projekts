@@ -104,7 +104,7 @@ def favourites():
 
 @app.route('/mypage')
 def mypage():
-    return render_template('mypage.html', user_name=user_name)
+    return render_template('users.html', user_name=user_name)
 
 
 @app.route('/contact')

@@ -21,9 +21,9 @@ __all__ = ["Author", "Book", "Order"]
 """
 
 
-#from .ingredient import Ingredient
+from .ingredient import Ingredient
 from .recipe import Recipe
 from .favourite_recipe import FavouriteRecipe
 
-#__all__ = ["Ingredient", "Recipe", "FavouriteRecipe"]
-__all__ = ["Recipe", "FavouriteRecipe"]
+__all__ = ["Ingredient", "Recipe", "FavouriteRecipe"]
+#__all__ = ["Recipe", "FavouriteRecipe"]

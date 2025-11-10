@@ -1,8 +1,8 @@
 from flask import Flask, render_template
 
 #from .models import Author, Book, Order
-#from .models import Ingredient, Recipe, FavouriteRecipe
-from .models import Recipe, FavouriteRecipe
+from .models import Ingredient, Recipe, FavouriteRecipe
+#from .models import Recipe, FavouriteRecipe
 from .models.base import db
 
 
@@ -25,10 +25,14 @@ def create_app():
     """
     #from .web.ingredient import ingredients_bp
     from .web.recipes import recipes_bp
-    #from .web.favourite_recipes import favourite_recipes_bp
+    from .web.favourite_recipes import favourite_recipes_bp
+    from .web.contact import contact_bp
+    from .web.my_page import my_page_bp
     #app.register_blueprint(ingredients_bp)  # /ingredients
     app.register_blueprint(recipes_bp)  # /recipes
-    #app.register_blueprint(favourite_recipes_bp)  # /favourite_recipes
+    app.register_blueprint(favourite_recipes_bp)  # /favourite_recipes
+    app.register_blueprint(contact_bp) # /contact_info
+    app.register_blueprint(my_page_bp) # /my_page
 
     # Register api endpoints
     from .api import api_bp
@@ -43,7 +47,7 @@ def create_app():
             #order_count=Order.query.count(),
 
             #ngredient_count=Ingredient.query.count(),
-            recipe_count=Recipe.query.count(),
+            #recipe_count=Recipe.query.count(),
             #favourite_recipe_count=FavouriteRecipe.query.count(),
         )
 

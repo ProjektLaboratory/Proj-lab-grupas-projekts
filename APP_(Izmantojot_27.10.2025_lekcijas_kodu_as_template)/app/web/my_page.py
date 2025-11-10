@@ -4,10 +4,10 @@ from sqlalchemy.testing.pickleable import Order
 from .. import db
 from ..models import Recipe
 
-recipes_bp = Blueprint("recipes", __name__, url_prefix="/recipe")
+my_page_bp = Blueprint("users-page", __name__, url_prefix="/users")
 
 
-@recipes_bp.get("/")
+@my_page_bp.get("/")
 def index():
     """
     q = request.args.get("q") or "").stip()
@@ -17,4 +17,4 @@ def index():
         quary = query.filter((Recipe.ingredients.ilike(like)))
     orders = query.order_by(Recipe.name.asc()).all()
     """
-    return render_template("recipes/recipe.html")
+    return render_template("users-page/users.html")

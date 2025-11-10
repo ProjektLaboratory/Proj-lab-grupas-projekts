@@ -3,7 +3,8 @@ from flask import Blueprint, jsonify
 from flask import request, jsonify, abort
 
 from ..helpers.helper import date_to_unix_ms
-from ..models import Author
+#from ..models import Author
+from ..models import Recipe
 from ..models.base import db
 from .utils import model_to_dict, paginate_query
 
@@ -14,7 +15,7 @@ api_bp = Blueprint("api", __name__, url_prefix="/api")
 def health():
     return jsonify({"status": "ok"})
 
-
+"""
 @api_bp.get('/authors')
 def list_authors():
     page = int(request.args.get('page', 1))
@@ -24,8 +25,19 @@ def list_authors():
         q = q.filter(Author.name.like('%' + name + '%'))
     items, meta = paginate_query(q, page, per_page)
     return jsonify({"data": [model_to_dict(a) for a in items], "meta": meta})
+"""
 
+api_bp.get('/recipes')
+def list_recipes():
+    page = int(request.args.get('page', 1))
+    per_page = int(request.args.get('per_page', 20))
+    q = Recipe.query
+    if name := request.args.get('q'):
+        q = q.filter(Recipe.name.like('%' + name + '%'))
+    items, meta = paginate_query(q, page, per_page)
+    return jsonify({"data": [model_to_dict(a) for a in items], "meta": meta})
 
+"""
 @api_bp.post('/authors')
 def create_author():
     payload = request.get_json(silent=True) or {}
@@ -41,3 +53,4 @@ def create_author():
     db.session.add(a)
     db.session.commit()
     return jsonify(model_to_dict(a)), 201
+"""

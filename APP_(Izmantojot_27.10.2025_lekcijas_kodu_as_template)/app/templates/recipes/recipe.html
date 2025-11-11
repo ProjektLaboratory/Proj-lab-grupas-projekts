@@ -1,214 +1,58 @@
-{% extends "home.html" %}
+{% extends 'base.html' %}
 {% block content %}
-
-<div class="container my-4" style="max-width:1200px;">
-  <h2 class="mb-3">Recipes</h2>
-  <p class="text-muted mb-4">9 recipes — 3 for Breakfast, 3 for Lunch, 3 for Dinner. Click on a card to view details.</p>
-
-  <!-- Sections -->
-  <section class="mb-5">
-    <h4>Breakfast</h4>
-    <div id="breakfastRow" class="row g-3 mt-2"></div>
-  </section>
-
-  <section class="mb-5">
-    <h4>Lunch</h4>
-    <div id="lunchRow" class="row g-3 mt-2"></div>
-  </section>
-
-  <section class="mb-5">
-    <h4>Dinner</h4>
-    <div id="dinnerRow" class="row g-3 mt-2"></div>
-  </section>
-</div>
-
-<!-- Recipe modal -->
-<div class="modal fade" id="recipeModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 id="modalTitle" class="modal-title"></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <img id="modalImage" src="" alt="" class="img-fluid rounded mb-3" style="width:100%; max-height:420px; object-fit:cover;">
-        <p id="modalShort" class="text-muted"></p>
-
-        <h6>Ingredients</h6>
-        <ul id="modalIngr"></ul>
-
-        <h6>Preparation</h6>
-        <ol id="modalSteps"></ol>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="m-0">Recipes</h2>
+      <!--
+    <a href="{{ url_for('recipes.new') }}" class="btn btn-success">New book</a>
+        -->
+    <a href="{{ url_for('recipes.index') }}" class="btn btn-success">New recipe</a>
   </div>
-</div>
 
-<style>
-.card-recipe { cursor:pointer; transition:transform .12s ease, box-shadow .12s; }
-.card-recipe:hover { transform: translateY(-4px); box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
-.card-recipe .card-img-top { height:180px; object-fit:cover; }
-@media (max-width:576px){ .card-recipe .card-img-top{ height:140px } }
-</style>
+  <form class="row gy-2 gx-2 align-items-end mb-3" method="get">
+    <div class="col-md-4">
+      <label for="title" class="form-label">Title contains</label>
+      <input type="text" id="title" name="title" class="form-control" value="{{ title }}" placeholder="e.g., War">
+    </div>
+    <div class="col-md-4">
+      <label for="author" class="form-label">Author name contains</label>
+      <input type="text" id="author" name="author" class="form-control" value="{{ author }}" placeholder="e.g., Tolstoy">
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-primary w-100" type="submit">Search</button>
+    </div>
+    <div class="col-md-2">
+      <a class="btn btn-outline-secondary w-100" href="{{ url_for('recipes.index') }}">Reset</a>
+    </div>
+  </form>
 
-<style>
-/* Favorite star button */
-.btn-fav {
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:36px;
-  height:36px;
-  border-radius:6px;
-  border:1px solid rgba(0,0,0,0.08);
-  background:white;
-  color:#6c757d;
-  font-size:18px;
-  transition: transform .12s ease, background .12s ease, color .12s ease;
-  cursor:pointer;
-}
-.btn-fav.active {
-  background: linear-gradient(90deg,#ffd54d,#ffb74d);
-  color: #7a3b00;
-  border-color: rgba(0,0,0,0.06);
-  box-shadow: 0 6px 18px rgba(255, 183, 77, 0.15);
-}
-/* pop animation */
-@keyframes pop {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.35); }
-  70% { transform: scale(0.95); }
-  100% { transform: scale(1); }
-}
-.btn-fav.pop {
-  animation: pop .36s ease;
-}
-</style>
-
-<script>
-/* ====== RECIPES (tavs esošais) ====== */
-const RECIPES = [
-  /* Breakfast (3) */
-  { id:'b1', cat:'breakfast', title:'Quick Omelette with Veggies', image:'/static/images/breakfast_omlete.jpg', short:'A hearty omelette in 10 minutes.', ingredients:['2 eggs','1/2 onion','50g mushrooms','salt, pepper'], steps:['Chop the vegetables','Heat pan and fry vegetables','Pour beaten eggs, cook until done'] },
-  { id:'b2', cat:'breakfast', title:'Greek Yogurt Bowl', image:'/static/images/breakfast_greek_yogurt.jpg', short:'Light bowl with fruits and granola.', ingredients:['200g yogurt','fresh fruits','granola','honey'], steps:['Add yogurt to bowl','Add sliced fruits and granola','Drizzle with honey'] },
-  { id:'b3', cat:'breakfast', title:'Oatmeal with Banana', image:'/static/images/breakfast_oatmeal_banana.jpg', short:'Warm oatmeal with bananas.', ingredients:['50g oats','1 banana','200ml milk/water','cinnamon'], steps:['Cook oats with milk','Slice banana and add','Sprinkle with cinnamon'] },
-
-  /* Lunch (3) */
-  { id:'l1', cat:'lunch', title:'Caesar Salad', image:'/static/images/lunch_caesar.jpg', short:'Classic romaine salad with creamy dressing.', ingredients:['Romaine lettuce','Cherry tomatoes','cucumber','Caesar dressing','Parmesan','croutons'], steps:['Chop lettuce','Add dressing and vegetables, mix','Top with cheese and croutons'] },
-  { id:'l2', cat:'lunch', title:'Seasonal Vegetable Soup', image:'/static/images/lunch_veg_soup.jpg', short:'Hearty seasonal soup.', ingredients:['potatoes','carrot','celery','onion','broth'], steps:['Chop vegetables','Fry onion and garlic','Add broth, cook 20–30 minutes'] },
-  { id:'l3', cat:'lunch', title:'Tuna Sandwich', image:'/static/images/lunch_tuna_sandwich.jpg', short:'Quick sandwich with tuna and veggies.', ingredients:['canned tuna','bread','lettuce','mayonnaise'], steps:['Mix tuna with mayo','Spread on bread','Add lettuce'] },
-
-  /* Dinner (3) */
-  { id:'d1', cat:'dinner', title:'Lemon Chicken Fillet', image:'/static/images/dinner_lemon_chicken.jpg', short:'Juicy chicken with lemon and herbs.', ingredients:['2 chicken fillets','1 lemon','oil','seasoning'], steps:['Prepare marinade','Pan cook 5–6 min','Add lemon juice and serve'] },
-  { id:'d2', cat:'dinner', title:'Stir Fried Veggie Pasta', image:'/static/images/dinner_stir_pasta.jpg', short:'Colorful vegan pasta dish.', ingredients:['pasta','zucchini','bell pepper','tomatoes'], steps:['Fry vegetables','Boil pasta','Mix and serve'] },
-  { id:'d3', cat:'dinner', title:'Steamed Salmon', image:'/static/images/dinner_steamed_salmon.jpg', short:'Healthy salmon with dill sauce.', ingredients:['salmon fillet','lemon','dill','salt'], steps:['Steam salmon','Prepare sauce','Serve with veggies'] }
-];
-
-/* ====== Favorites logic ====== */
-const FAVS_KEY = 'limpa_favs_v1';
-
-function getFavs(){
-  try { return JSON.parse(localStorage.getItem(FAVS_KEY) || '[]'); }
-  catch(e){ return []; }
-}
-function setFavs(arr){ localStorage.setItem(FAVS_KEY, JSON.stringify(Array.from(new Set(arr)))); }
-
-function popButton(btn){
-  btn.classList.remove('pop');
-  void btn.offsetWidth;
-  btn.classList.add('pop');
-}
-
-function toggleFavorite(id, btn){
-  const favs = getFavs();
-  const idx = favs.indexOf(id);
-  if(idx === -1){
-    favs.push(id);
-    setFavs(favs);
-    btn.classList.add('active');
-  } else {
-    favs.splice(idx,1);
-    setFavs(favs);
-    btn.classList.remove('active');
-  }
-  popButton(btn);
-}
-
-/* ====== Render section (ar fav pogu) ====== */
-function renderSection(targetId, items){
-  const row = document.getElementById(targetId);
-  if(!row) return;
-  row.innerHTML = '';
-  const favs = getFavs();
-  items.forEach(r=>{
-    const col = document.createElement('div');
-    col.className = 'col-sm-6 col-md-4';
-    col.innerHTML = `
-      <div class="card card-recipe h-100 position-relative" data-id="${r.id}">
-        <div style="position:relative;">
-          <img src="${r.image}" class="card-img-top" alt="${escapeHtml(r.title)}">
-          <div style="position:absolute; right:12px; top:10px; z-index:5; display:flex; gap:8px;">
-            <button class="btn-fav ${favs.includes(r.id)?'active':''}" data-id="${r.id}" title="Save recipe">★</button>
-          </div>
-        </div>
-        <div class="card-body d-flex flex-column">
-          <h6 class="card-title mb-1">${escapeHtml(r.title)}</h6>
-          <p class="text-muted small mb-2">${escapeHtml(r.short)}</p>
-          <div class="mt-auto text-end">
-            <button class="btn btn-sm btn-outline-primary" data-id="${r.id}">View</button>
-          </div>
-        </div>
-      </div>`;
-    row.appendChild(col);
-
-    const favBtn = col.querySelector('.btn-fav');
-    favBtn.addEventListener('click', (ev)=>{
-      ev.stopPropagation();
-      toggleFavorite(r.id, favBtn);
-    });
-
-    const cardRoot = col.querySelector('.card-recipe');
-    cardRoot.addEventListener('click', (ev)=>{
-      if(ev.target.closest('.btn-fav')) return;
-      openRecipeModal(r.id);
-    });
-
-    const viewBtn = col.querySelector('button.btn-outline-primary');
-    viewBtn.addEventListener('click', (ev)=>{
-      ev.stopPropagation();
-      openRecipeModal(r.id);
-    });
-  });
-}
-
-function escapeHtml(s){ if(!s) return ''; return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;'); }
-
-function openRecipeModal(id){
-  const r = RECIPES.find(x=> x.id === id);
-  if(!r) return;
-  document.getElementById('modalTitle').textContent = r.title;
-  document.getElementById('modalImage').src = r.image;
-  document.getElementById('modalImage').alt = r.title;
-  document.getElementById('modalShort').textContent = r.short;
-
-  const ingr = document.getElementById('modalIngr'); ingr.innerHTML = '';
-  (r.ingredients||[]).forEach(i=> { const li=document.createElement('li'); li.textContent = i; ingr.appendChild(li); });
-
-  const steps = document.getElementById('modalSteps'); steps.innerHTML = '';
-  (r.steps||[]).forEach(s=> { const li=document.createElement('li'); li.textContent = s; steps.appendChild(li); });
-
-  const modal = new bootstrap.Modal(document.getElementById('recipeModal'), {});
-  modal.show();
-}
-
-document.addEventListener('DOMContentLoaded', ()=>{
-  renderSection('breakfastRow', RECIPES.filter(r=> r.cat==='breakfast'));
-  renderSection('lunchRow', RECIPES.filter(r=> r.cat==='lunch'));
-  renderSection('dinnerRow', RECIPES.filter(r=> r.cat==='dinner'));
-});
-</script>
-
+  {% if recipes %}
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Ingredients</th>
+            <th>Favorites</th>
+            <th style="width: 1%"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in recipes %}
+          <tr>
+            <td>{{ b.name }}</td>
+            <td>{{ b.ingredients or '—' }}</td>
+              <!--
+            <td>{{ b.author.name }}</td>
+                -->
+            <td>
+              <a href="{{ url_for('recipes.edit', recipe_id=b.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted">No recipes found.</p>
+  {% endif %}
 {% endblock %}

@@ -4,7 +4,7 @@ from sqlalchemy.testing.pickleable import Order
 from .. import db
 from ..models import Recipe
 
-recipes_bp = Blueprint("recipes", __name__, url_prefix="/recipe")
+recipes_bp = Blueprint("recipes", __name__, url_prefix="/recipes")
 
 
 @recipes_bp.get("/")
@@ -18,3 +18,7 @@ def index():
     orders = query.order_by(Recipe.name.asc()).all()
     """
     return render_template("recipes/recipe.html")
+
+@recipes_bp.get("/new")
+def new():
+    return render_template("recipes/new.html")

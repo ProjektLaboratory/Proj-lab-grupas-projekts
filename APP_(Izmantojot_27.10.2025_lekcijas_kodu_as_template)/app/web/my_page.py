@@ -4,7 +4,7 @@ from sqlalchemy.testing.pickleable import Order
 from .. import db
 from ..models import Recipe
 
-my_page_bp = Blueprint("users-page", __name__, url_prefix="/users")
+my_page_bp = Blueprint("users-page", __name__, url_prefix="/user")
 
 
 @my_page_bp.get("/")

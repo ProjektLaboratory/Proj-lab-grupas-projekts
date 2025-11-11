@@ -1,5 +1,5 @@
 // static/js/recipes-data.js
-// Centralized recipes data used by home.html and recipe.html
+// Centralized recipes data used by home.html and oldrecipe.html
 window.RECIPES = [
   /* Breakfast (3) */
   {

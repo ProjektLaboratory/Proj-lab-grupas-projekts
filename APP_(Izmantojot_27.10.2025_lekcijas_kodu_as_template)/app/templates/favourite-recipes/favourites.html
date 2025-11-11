@@ -1,5 +1,60 @@
-{% extends "home.html" %}
+{% extends 'base.html' %}
 {% block content %}
-<h2>Favourite Recipes</h2>
-<p>Your saved recipes will appear here.</p>
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="m-0">Favourites</h2>
+      <!--
+    <a href="{{ url_for('favourite-recipes.new') }}" class="btn btn-success">New book</a>
+        -->
+    <a href="{{ url_for('favourite-recipes.index') }}" class="btn btn-success">New favourite recipe</a>
+  </div>
+
+  <form class="row gy-2 gx-2 align-items-end mb-3" method="get">
+    <div class="col-md-4">
+      <label for="title" class="form-label">Title contains</label>
+      <input type="text" id="title" name="title" class="form-control" value="{{ title }}" placeholder="e.g., War">
+    </div>
+    <div class="col-md-4">
+      <label for="author" class="form-label">Author name contains</label>
+      <input type="text" id="author" name="author" class="form-control" value="{{ author }}" placeholder="e.g., Tolstoy">
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-primary w-100" type="submit">Search</button>
+    </div>
+    <div class="col-md-2">
+      <a class="btn btn-outline-secondary w-100" href="{{ url_for('favourite-recipes.index') }}">Reset</a>
+    </div>
+  </form>
+
+    {% if favourite_recipes %}
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <!--
+            <th>Year</th>
+            <th>Author</th>
+            -->
+            <th style="width: 1%"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in favourite_recipes %}
+          <tr>
+            <td>{{ b.title }}</td>
+              <!--
+            <td>{{ b.published_year or '—' }}</td>
+            <td>{{ b.author.name }}</td>
+                -->
+            <td>
+              <a href="{{ url_for('favourite-recipes.edit', favourite_recipe_id=b.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted">No favourite recipes found.</p>
+  {% endif %}
 {% endblock %}

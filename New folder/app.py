@@ -94,7 +94,7 @@ def filter_recipes():
 
 @app.route('/recipe')
 def recipe():
-    return render_template('recipe.html', user_name=user_name)
+    return render_template('oldrecipe.html', user_name=user_name)
 
 
 @app.route('/favourites')

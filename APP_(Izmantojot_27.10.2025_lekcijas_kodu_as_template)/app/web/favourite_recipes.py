@@ -16,3 +16,7 @@ def index():
     """
     #return render_template("favourite-recipes/favourites.html")
     return render_template("favourite-recipes/favourites.html")
+
+@favourite_recipes_bp.get("/new")
+def new():
+    return render_template("favourite_recipes/new.html")

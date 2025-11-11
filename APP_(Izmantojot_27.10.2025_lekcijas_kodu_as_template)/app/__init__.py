@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 
 #from .models import Author, Book, Order
-from .models import Ingredient, Recipe, FavouriteRecipe
+#from .models import Ingredient, Recipe, FavouriteRecipe
 #from .models import Recipe, FavouriteRecipe
 from .models.base import db
 
@@ -23,12 +23,10 @@ def create_app():
     app.register_blueprint(books_bp)  # /books
     app.register_blueprint(orders_bp)  # /orders
     """
-    #from .web.ingredient import ingredients_bp
     from .web.recipes import recipes_bp
     from .web.favourite_recipes import favourite_recipes_bp
     from .web.contact import contact_bp
     from .web.my_page import my_page_bp
-    #app.register_blueprint(ingredients_bp)  # /ingredients
     app.register_blueprint(recipes_bp)  # /recipes
     app.register_blueprint(favourite_recipes_bp)  # /favourite_recipes
     app.register_blueprint(contact_bp) # /contact_info

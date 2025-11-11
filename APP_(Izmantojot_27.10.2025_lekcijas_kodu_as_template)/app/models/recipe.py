@@ -10,7 +10,3 @@ class Recipe(db.Model):
         "Ingredient",
         back_populates="recipes",
     )
-    favorites = db.relationship(
-        "FavoriteRecipe",
-        back_populates="recipes",
-    )

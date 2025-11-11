@@ -8,23 +8,99 @@ import sqlite3
 def create_tables(conn):
     cur = conn.cursor()
 
-    # Create recipes table
+
+    # Creates nutritional values table
     cur.execute('''
-        CREATE TABLE IF NOT EXISTS recipes (
+        CREATE TABLE nutritional_values(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            instructions TEXT,
-            ingredients TEXT
+            calories INTEGER,
+            protein REAL,
+            carbs REAL,
+            fat REAL
         )
     ''')
 
-    # Create favourite_recipes table
+    # Creates recipes cooking time table
+    cur.execute('''
+        CREATE TABLE time (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            length INTEGER
+        )
+    ''')
+
+    # Creates recipes category table
+    cur.execute('''
+        CREATE TABLE category(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT
+        )
+    ''')
+
+    # Create recipes cruisine table
+    cur.execute('''
+        CREATE TABLE cuisine(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT
+        )
+    ''')
+
+    # Creates ingredients table
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS ingredients (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            nutritional_values_id INTEGER,
+            FOREIGN KEY (nutritional_values_id) REFERENCES nutritional_values(id)
+        )
+    ''')
+
+
+    # Creates recipes ingriedient table
+    cur.execute('''
+        CREATE TABLE recipe_ingredients (
+            id INTEGER,
+            ingredient_id INTEGER,
+            measurement TEXT,
+            PRIMARY KEY (id, ingredient_id),
+            FOREIGN KEY (recipe_id) REFERENCES recipes(id),
+            FOREIGN KEY (ingredient_id) REFERENCES ingredients(id)
+        )
+    ''')
+
+    # Creates recipes table
+    cur.execute('''
+        CREATE TABLE recipes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            recipe_ingredients_id INTEGER,
+            time_id INTEGER,
+            category_id INTEGER,
+            cuisine_id INTEGER,
+            FOREIGN KEY (recipe_ingredients_id) REFERENCES recipe_ingredients(id),
+            FOREIGN KEY (time_id) REFERENCES time(id),
+            FOREIGN KEY (category_id) REFERENCES category(id),
+            FOREIGN KEY (cuisine_id) REFERENCES cuisine(id)
+        )
+    ''')
+
+    # Creates favourite_recipes table
     cur.execute('''
         CREATE TABLE IF NOT EXISTS favourite_recipes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
-            recipes INTEGER,
-            FOREIGN KEY (recipes) REFERENCES recipes (id)
+            favourites TEXT,
+            FOREIGN KEY (favourites) REFERENCES recipes (name)
+        )
+    ''')
+
+    # Creates users table
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            surnname TEXT,
+            email TEXT,
+            favourite_recipes_id INTEGER,
+            FOREIGN KEY (favourite_recipes_id) REFERENCES favourite_recipes (id)
         )
     ''')
 

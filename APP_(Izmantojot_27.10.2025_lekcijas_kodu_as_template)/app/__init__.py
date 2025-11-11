@@ -23,10 +23,12 @@ def create_app():
     app.register_blueprint(books_bp)  # /books
     app.register_blueprint(orders_bp)  # /orders
     """
+    from .web.access import access_bp
     from .web.recipes import recipes_bp
     from .web.favourite_recipes import favourite_recipes_bp
     from .web.contact import contact_bp
     from .web.my_page import my_page_bp
+    app.register_blueprint(access_bp) # /access
     app.register_blueprint(recipes_bp)  # /recipes
     app.register_blueprint(favourite_recipes_bp)  # /favourite_recipes
     app.register_blueprint(contact_bp) # /contact_info
@@ -40,6 +42,8 @@ def create_app():
     def home():
         return render_template(
             "home.html",
+            #'register-and-login/access.html',
+
             #author_count=Author.query.count(),
             #book_count=Book.query.count(),
             #order_count=Order.query.count(),

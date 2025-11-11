@@ -1,0 +1,97 @@
+{% extends "home.html" %}
+{% block content %}
+
+<div class="container my-5" style="max-width:980px;">
+
+  <!-- PROJEKTA VIRSRADSTS un oficiālais e-pasts -->
+  <div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+      <h1 id="projectName" class="display-6">Limpa</h1>
+      <p class="text-muted mb-0">Personalized meal generator by preferences, cuisine type, and ingredients — fast, smart, and customized.</p>
+    </div>
+    <div class="text-end">
+      <p class="mb-1">Official email:</p>
+      <a id="projectEmail" href="mailto:info@limpa.lv" class="btn btn-outline-primary btn-sm">info@limpa.lv</a>
+    </div>
+  </div>
+
+
+
+<script>
+// localStorage keys
+const LS_BIZ = 'limpa_biz';
+const LS_PROFILE = 'limpa_profile_v1';
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadBiz();
+  loadProfileToInputs();
+
+  document.getElementById('saveBiz').addEventListener('click', saveBiz);
+  document.getElementById('prefillProfile').addEventListener('click', prefillFromProfile);
+});
+
+function loadBiz(){
+  // load stored or apply sensible defaults
+  const stored = JSON.parse(localStorage.getItem(LS_BIZ) || '{}');
+  const defaults = {
+    name: 'Limpa',
+    reg: '',
+    vat: '',
+    addr: '',
+    phone: ''
+  };
+  const b = Object.assign({}, defaults, stored);
+
+  document.getElementById('bizName').value = b.name || '';
+  document.getElementById('bizReg').value = b.reg || '';
+  document.getElementById('bizVAT').value = b.vat || '';
+  document.getElementById('bizAddr').value = b.addr || '';
+  document.getElementById('bizPhone').value = b.phone || '';
+
+  document.getElementById('projectName').textContent = 'Limpa';
+  const emailEl = document.getElementById('projectEmail');
+  emailEl.href = 'mailto:info@limpa.lv';
+  emailEl.textContent = 'info@limpa.lv';
+}
+
+function saveBiz(){
+  const b = {
+    name: document.getElementById('bizName').value.trim() || 'Limpa',
+    reg: document.getElementById('bizReg').value.trim(),
+    vat: document.getElementById('bizVAT').value.trim(),
+    addr: document.getElementById('bizAddr').value.trim(),
+    phone: document.getElementById('bizPhone').value.trim()
+  };
+  localStorage.setItem(LS_BIZ, JSON.stringify(b));
+  const toast = new bootstrap.Toast(document.getElementById('successToast'));
+  document.querySelector('#successToast .toast-body').textContent = 'Company details saved locally.';
+  toast.show();
+  setTimeout(()=> document.querySelector('#successToast .toast-body').textContent = 'Thank you! This is a demo, messages are not actually sent.', 1600);
+}
+
+function loadProfileToInputs(){
+  const prof = JSON.parse(localStorage.getItem(LS_PROFILE) || '{}');
+  document.getElementById('inputName').value = prof.name || '';
+  document.getElementById('inputEmail').value = prof.email || '';
+}
+
+function prefillFromProfile(){
+  loadProfileToInputs();
+  const toast = new bootstrap.Toast(document.getElementById('successToast'));
+  document.querySelector('#successToast .toast-body').textContent = 'Filled from saved profile (locally).';
+  toast.show();
+  setTimeout(()=> document.querySelector('#successToast .toast-body').textContent = 'Thank you! This is a demo, messages are not actually sent.', 1600);
+}
+
+function fakeSend(e){
+  e.preventDefault();
+  const toast = new bootstrap.Toast(document.getElementById('successToast'));
+  toast.show();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.textContent = 'Sent ✓';
+  setTimeout(()=> { btn.disabled = false; btn.textContent = 'Send'; }, 2000);
+}
+</script>
+
+{% endblock %}

@@ -34,6 +34,15 @@ def create_app():
     app.register_blueprint(contact_bp) # /contact_info
     app.register_blueprint(my_page_bp) # /my_page
 
+
+    from .web.new_start_page import new_start_page_bp
+    app.register_blueprint(new_start_page_bp)
+    from .web.new_contact import new_contact_bp
+    app.register_blueprint(new_contact_bp)
+    from .web.new_about_us import new_about_us_bp
+    app.register_blueprint(new_about_us_bp)
+
+
     # Register api endpoints
     from .api import api_bp
     app.register_blueprint(api_bp)
@@ -41,8 +50,10 @@ def create_app():
     @app.get("/")
     def home():
         return render_template(
-            "home.html",
+            #"home.html",
             #'register-and-login/access.html',
+
+            'new-start-page/start.html',
 
             #author_count=Author.query.count(),
             #book_count=Book.query.count(),

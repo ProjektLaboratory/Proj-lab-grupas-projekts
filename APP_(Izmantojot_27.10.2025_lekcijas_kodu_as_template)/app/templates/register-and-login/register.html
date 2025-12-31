@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpa - Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F9F9FF;
+            color: #896E69;
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: #F9F9FF;
+            padding: 22px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 10;
+            width: 100%;
+        }
+
+        .company-name {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 50%, #FFA577 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info a {
+            color: #8C0004;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: rgba(142, 0, 4, 0.1);
+        }
+
+        .user-info a:hover {
+            background: rgba(142, 0, 4, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 165, 119, 0.1);
+            z-index: -1;
+        }
+
+        .floating-1 {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            right: 5%;
+        }
+
+        .floating-2 {
+            width: 150px;
+            height: 150px;
+            bottom: 15%;
+            left: 5%;
+            background: rgba(142, 0, 4, 0.1);
+        }
+
+        .content {
+            padding: 40px;
+            flex-grow: 1;
+            background-color: #F9F9FF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+        }
+
+        .register-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 50%, #FFA577 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .page-subtitle {
+            color: #896E69;
+            font-size: 16px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .register-card {
+            background-color: rgb(255, 255, 255);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgb(255, 255, 255);
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .register-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 36px;
+        }
+
+        .register-card h5 {
+            color: #b63b44db;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .register-card h5::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            border-radius: 2px;
+        }
+
+        .form-label {
+            color: #896E69;
+            font-weight: 500;
+        }
+
+        .form-control {
+            border: 1px solid rgba(140, 0, 4, 0.2);
+            border-radius: 8px;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #8C0004;
+            box-shadow: 0 0 0 0.2rem rgba(140, 0, 4, 0.15);
+        }
+
+        .form-check-input:checked {
+            background-color: #8C0004;
+            border-color: #8C0004;
+        }
+
+        .form-check-input:focus {
+            border-color: #8C0004;
+            box-shadow: 0 0 0 0.2rem rgba(140, 0, 4, 0.25);
+        }
+
+        .form-check-label {
+            color: #896E69;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            border: none;
+            color: white;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-gradient:hover::before {
+            left: 100%;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(142, 0, 4, 0.4);
+        }
+
+        .btn-outline-gradient {
+            border: 2px solid #8C0004;
+            color: #8C0004;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-outline-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(140, 0, 4, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-outline-gradient:hover::before {
+            left: 100%;
+        }
+
+        .btn-outline-gradient:hover {
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            border-color: #8C0004;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(142, 0, 4, 0.3);
+        }
+
+        .btn-secondary-gradient {
+            border: 2px solid #896E69;
+            color: #896E69;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .btn-secondary-gradient:hover {
+            background: linear-gradient(135deg, #896E69 0%, #6d554f 100%);
+            border-color: #896E69;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(109, 85, 79, 0.3);
+        }
+
+        .login-link {
+            color: #8C0004;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .login-link:hover {
+            color: #6d0003;
+            text-decoration: underline;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #896E69;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+        }
+
+        .password-strength {
+            height: 5px;
+            margin-top: 5px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .strength-text {
+            font-size: 12px;
+            color: #896E69;
+            margin-top: 5px;
+        }
+
+        .toast-success {
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .preference-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .preference-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(142, 0, 4, 0.3);
+        }
+
+        .preference-badge.selected {
+            background: linear-gradient(135deg, #8C0004 0%, #6d0003 100%);
+            box-shadow: 0 4px 12px rgba(142, 0, 4, 0.3);
+        }
+
+        .avatar-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .avatar-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin: 0 auto 15px;
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            color: white;
+            font-size: 48px;
+        }
+
+        .avatar-upload-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 100%);
+            color: white;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+        }
+
+        .avatar-upload-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(142, 0, 4, 0.3);
+        }
+
+        .avatar-upload-input {
+            display: none;
+        }
+
+        .avatar-change-text {
+            color: #8C0004;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+            text-decoration: underline;
+        }
+
+        .avatar-change-text:hover {
+            color: #6d0003;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(255, 165, 119, 0.1) 0%, rgba(182, 59, 68, 0.1) 50%, rgba(140, 0, 4, 0.1) 100%);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            height: 100%;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(140, 0, 4, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(140, 0, 4, 0.15);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: white;
+            font-size: 24px;
+        }
+
+        .feature-card h6 {
+            color: #8C0004;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #896E69;
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 992px) {
+            .header {
+                padding: 18px 25px;
+            }
+
+            .content {
+                padding: 25px;
+            }
+
+            .register-card {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+
+            .company-name {
+                order: 1;
+                width: 100%;
+                text-align: center;
+                margin: 10px 0;
+            }
+
+            .user-info {
+                order: 2;
+                margin: 0 auto;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .register-card {
+                padding: 25px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .register-card h5 {
+                font-size: 22px;
+            }
+
+            .register-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 32px;
+            }
+
+            .avatar-preview {
+                width: 100px;
+                height: 100px;
+            }
+
+            .avatar-placeholder {
+                font-size: 36px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                padding: 12px 15px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .register-card {
+                padding: 20px;
+            }
+
+            .btn-gradient, .btn-outline-gradient {
+                padding: 10px 18px;
+                font-size: 14px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .register-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
+            }
+
+            .avatar-preview {
+                width: 90px;
+                height: 90px;
+            }
+
+            .avatar-placeholder {
+                font-size: 32px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="floating-element floating-1"></div>
+    <div class="floating-element floating-2"></div>
+
+    <div class="header">
+        <div class="company-name">Limpa</div>
+
+        <div class="user-info">
+            <a href="login.html"btn-outline-gradient>
+                <i class="fas fa-sign-in-alt me-1"></i> Login
+            </a>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="register-container">
+            <h1 class="page-title">Create Your Account</h1>
+            <p class="page-subtitle">Join Limpa community to discover delicious recipes and culinary inspiration.</p>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="register-card">
+                        <div class="register-header">
+                            <div class="register-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <h5>Register Now</h5>
+                            <p class="text-muted">Fill in your details to get started with Limpa</p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <form id="registerForm">
+                                    <div class="avatar-section">
+                                        <div class="avatar-container">
+                                            <div class="avatar-preview" id="avatarPreview">
+                                                <div class="avatar-placeholder" id="avatarPlaceholder">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                                <img id="avatarImage" src="" alt="Profile Photo" style="display: none;">
+                                            </div>
+                                            <div class="avatar-upload-btn" id="avatarUploadBtn">
+                                                <i class="fas fa-camera"></i>
+                                            </div>
+                                            <input type="file" id="avatarUploadInput" class="avatar-upload-input" accept="image/*">
+                                        </div>
+                                        <div class="avatar-change-text" id="changeAvatarText">Add Profile Photo</div>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">First Name</label>
+                                            <input type="text" id="firstName" class="form-control" placeholder="Enter your first name" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Last Name</label>
+                                            <input type="text" id="lastName" class="form-control" placeholder="Enter your last name" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3 mt-3">
+                                        <label class="form-label">Email Address</label>
+                                        <input type="email" id="email" class="form-control" placeholder="your@email.com" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <div class="password-container">
+                                            <input type="password" id="password" class="form-control" placeholder="Create a strong password" required>
+                                            <button type="button" class="password-toggle" id="togglePassword">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                        <div class="password-strength" id="passwordStrength">
+                                            <div class="progress" style="height: 100%;">
+                                                <div class="progress-bar" role="progressbar" id="strengthBar" style="width: 0%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="strength-text" id="strengthText">Password strength: None</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Confirm Password</label>
+                                        <div class="password-container">
+                                            <input type="password" id="confirmPassword" class="form-control" placeholder="Re-enter your password" required>
+                                            <button type="button" class="password-toggle" id="toggleConfirmPassword">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                        <div class="text-danger small mt-1" id="passwordMatchMessage"></div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Dietary Preferences</label>
+                                        <div class="d-flex flex-wrap gap-2 mb-2">
+                                            <button type="button" class="preference-badge" data-pref="vegetarian">Vegetarian</button>
+                                            <button type="button" class="preference-badge" data-pref="vegan">Vegan</button>
+                                            <button type="button" class="preference-badge" data-pref="gluten-free">Gluten-Free</button>
+                                            <button type="button" class="preference-badge" data-pref="dairy-free">Dairy-Free</button>
+                                            <button type="button" class="preference-badge" data-pref="keto">Keto</button>
+                                            <button type="button" class="preference-badge" data-pref="paleo">Paleo</button>
+                                        </div>
+                                        <input type="text" id="preferences" class="form-control" placeholder="Selected preferences will appear here" readonly>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="terms" required>
+                                            <label class="form-check-label" for="terms">
+                                                I agree to the <a href="#" class="login-link">Terms of Service</a> and <a href="#" class="login-link">Privacy Policy</a>
+                                            </label>
+                                        </div>
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" id="newsletter">
+                                            <label class="form-check-label" for="newsletter">
+                                                Subscribe to our newsletter for recipes and cooking tips
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn-gradient">
+                                            <i class="fas fa-user-plus me-2"></i> Create Account
+                                        </button>
+                                        <button type="button" class="btn-secondary-gradient" onclick="resetForm()">
+                                            <i class="fas fa-redo me-2"></i> Reset Form
+                                        </button>
+                                    </div>
+
+                                    <div class="text-center mt-4">
+                                        <p class="mb-0">Already have an account? <a href="login.html" class="login-link">Sign In</a></p>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="col-lg-6 mt-4 mt-lg-0">
+                                <div class="h-100 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <h5 class="mb-4">Why Join Limpa?</h5>
+                                        <div class="row g-3">
+                                            <div class="col-12">
+                                                <div class="feature-card">
+                                                    <div class="feature-icon">
+                                                        <i class="fas fa-utensils"></i>
+                                                    </div>
+                                                    <h6>Personalized Recipes</h6>
+                                                    <p>Get recipe recommendations based on your dietary preferences and cooking style</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="feature-card">
+                                                    <div class="feature-icon">
+                                                        <i class="fas fa-heart"></i>
+                                                    </div>
+                                                    <h6>Save Favorites</h6>
+                                                    <p>Bookmark your favorite recipes and create personalized collections</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="feature-card">
+                                                    <div class="feature-icon">
+                                                        <i class="fas fa-users"></i>
+                                                    </div>
+                                                    <h6>Join Community</h6>
+                                                    <p>Connect with other food enthusiasts, share recipes and cooking tips</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="successToast" class="toast align-items-center toast-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage">Account created successfully!</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        const PROFILE_KEY = 'limpa_profile_v1';
+        const AVATAR_KEY = 'limpa_avatar_v1';
+        const USERS_KEY = 'limpa_users_v1';
+        let avatarDataUrl = '';
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const togglePasswordBtn = document.getElementById('togglePassword');
+            const toggleConfirmPasswordBtn = document.getElementById('toggleConfirmPassword');
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+            const passwordMatchMessage = document.getElementById('passwordMatchMessage');
+            const avatarUploadBtn = document.getElementById('avatarUploadBtn');
+            const avatarUploadInput = document.getElementById('avatarUploadInput');
+            const changeAvatarText = document.getElementById('changeAvatarText');
+            const avatarImage = document.getElementById('avatarImage');
+            const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+            const registerForm = document.getElementById('registerForm');
+
+
+            const preferenceButtons = document.querySelectorAll('.preference-badge');
+            const preferencesInput = document.getElementById('preferences');
+
+            preferenceButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const prefText = button.textContent;
+                    let currentPrefs = preferencesInput.value ? preferencesInput.value.split(',').map(p => p.trim()).filter(p => p !== '') : [];
+
+                    const index = currentPrefs.indexOf(prefText);
+                    if (index === -1) {
+                        currentPrefs.push(prefText);
+                        button.classList.add('selected');
+                    } else {
+                        currentPrefs.splice(index, 1);
+                        button.classList.remove('selected');
+                    }
+
+                    preferencesInput.value = currentPrefs.join(', ');
+                });
+            });
+
+            togglePasswordBtn.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                togglePasswordBtn.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+
+            toggleConfirmPasswordBtn.addEventListener('click', () => {
+                const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPasswordInput.setAttribute('type', type);
+                toggleConfirmPasswordBtn.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+
+            passwordInput.addEventListener('input', checkPasswordStrength);
+            confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+            avatarUploadBtn.addEventListener('click', () => {
+                avatarUploadInput.click();
+            });
+
+            changeAvatarText.addEventListener('click', () => {
+                avatarUploadInput.click();
+            });
+
+            avatarUploadInput.addEventListener('change', handleAvatarUpload);
+
+            registerForm.addEventListener('submit', registerUser);
+
+            function checkPasswordStrength() {
+                const password = passwordInput.value;
+                let strength = 0;
+
+                if (password.length >= 8) strength++;
+                if (/[a-z]/.test(password)) strength++;
+                if (/[A-Z]/.test(password)) strength++;
+                if (/[0-9]/.test(password)) strength++;
+                if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+                const strengthPercent = (strength / 5) * 100;
+                strengthBar.style.width = `${strengthPercent}%`;
+
+                let strengthLevel = 'None';
+                let color = '#dc3545';
+
+                if (strengthPercent <= 20) {
+                    strengthLevel = 'Very Weak';
+                    color = '#dc3545';
+                } else if (strengthPercent <= 40) {
+                    strengthLevel = 'Weak';
+                    color = '#ffc107';
+                } else if (strengthPercent <= 60) {
+                    strengthLevel = 'Fair';
+                    color = '#fd7e14';
+                } else if (strengthPercent <= 80) {
+                    strengthLevel = 'Good';
+                    color = '#20c997';
+                } else {
+                    strengthLevel = 'Strong';
+                    color = '#198754';
+                }
+
+                strengthBar.style.backgroundColor = color;
+                strengthText.textContent = `Password strength: ${strengthLevel}`;
+                strengthText.style.color = color;
+            }
+
+            function checkPasswordMatch() {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                if (confirmPassword === '') {
+                    passwordMatchMessage.textContent = '';
+                    return;
+                }
+
+                if (password === confirmPassword) {
+                    passwordMatchMessage.textContent = '✓ Passwords match';
+                    passwordMatchMessage.className = 'text-success small mt-1';
+                } else {
+                    passwordMatchMessage.textContent = '✗ Passwords do not match';
+                    passwordMatchMessage.className = 'text-danger small mt-1';
+                }
+            }
+
+            function handleAvatarUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                if (!file.type.match('image.*')) {
+                    alert('Please select an image file (JPG, PNG, GIF, etc.)');
+                    return;
+                }
+
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('Image size should be less than 2MB');
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    avatarDataUrl = e.target.result;
+                    avatarImage.src = avatarDataUrl;
+                    avatarImage.style.display = 'block';
+                    avatarPlaceholder.style.display = 'none';
+                    changeAvatarText.textContent = 'Change Photo';
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function registerUser(event) {
+            event.preventDefault();
+
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const preferences = document.getElementById('preferences').value;
+            const terms = document.getElementById('terms').checked;
+            const newsletter = document.getElementById('newsletter').checked;
+
+            if (!terms) {
+                alert('Please agree to the Terms of Service and Privacy Policy');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match. Please check your password confirmation.');
+                return;
+            }
+
+            const existingUsers = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+            const userExists = existingUsers.some(user => user.email === email);
+
+            if (userExists) {
+                alert('A user with this email already exists. Please use a different email or login.');
+                return;
+            }
+
+            const userData = {
+                id: Date.now().toString(),
+                firstName,
+                lastName,
+                email,
+                preferences: preferences ? preferences.split(',').map(p => p.trim()).filter(p => p !== '') : [],
+                newsletter,
+                joinDate: new Date().toISOString(),
+                isLoggedIn: true
+            };
+
+            existingUsers.push(userData);
+            localStorage.setItem(USERS_KEY, JSON.stringify(existingUsers));
+
+            localStorage.setItem('current_user', JSON.stringify(userData));
+
+            const profile = {
+                name: `${firstName} ${lastName}`,
+                email: email,
+                bio: '',
+                preferences: userData.preferences,
+                joinDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+            };
+
+            localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+
+            if (avatarDataUrl) {
+                localStorage.setItem(AVATAR_KEY, avatarDataUrl);
+            }
+
+            sendWelcomeEmail(firstName, email);
+
+            const toastElement = document.getElementById('successToast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = `Welcome to Limpa, ${firstName}! Your account has been created successfully.`;
+
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+
+            setTimeout(() => {
+                window.location.href = 'home.html';
+            }, 3000);
+        }
+
+        function sendWelcomeEmail(firstName, email) {
+
+            console.log(`Sending welcome email to ${email}`);
+            console.log(`Email content: Welcome ${firstName}! Thank you for registering at Limpa.`);
+
+            setTimeout(() => {
+                const toastElement = document.getElementById('successToast');
+                const toastMessage = document.getElementById('toastMessage');
+                toastMessage.textContent = `Welcome email sent to ${email}`;
+
+                const toast = new bootstrap.Toast(toastElement);
+                toast.show();
+            }, 1000);
+        }
+
+        function resetForm() {
+            document.getElementById('registerForm').reset();
+            document.getElementById('avatarImage').style.display = 'none';
+            document.getElementById('avatarPlaceholder').style.display = 'flex';
+            document.getElementById('changeAvatarText').textContent = 'Add Profile Photo';
+            document.getElementById('preferences').value = '';
+            document.getElementById('strengthBar').style.width = '0%';
+            document.getElementById('strengthText').textContent = 'Password strength: None';
+            document.getElementById('strengthText').style.color = '#896E69';
+            document.getElementById('passwordMatchMessage').textContent = '';
+
+            const preferenceButtons = document.querySelectorAll('.preference-badge');
+            preferenceButtons.forEach(button => {
+                button.classList.remove('selected');
+            });
+
+            avatarDataUrl = '';
+        }
+    </script>
+</body>
+</html>

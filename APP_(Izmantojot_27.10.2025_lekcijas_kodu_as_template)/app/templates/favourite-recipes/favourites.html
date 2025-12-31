@@ -1,60 +1,860 @@
-{% extends 'base.html' %}
-{% block content %}
-  <div class="d-flex align-items-center justify-content-between mb-3">
-    <h2 class="m-0">Favourites</h2>
-      <!--
-    <a href="{{ url_for('favourite-recipes.new') }}" class="btn btn-success">New book</a>
-        -->
-    <a href="{{ url_for('favourite-recipes.index') }}" class="btn btn-success">New favourite recipe</a>
-  </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpa - Favourite Recipes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <form class="row gy-2 gx-2 align-items-end mb-3" method="get">
-    <div class="col-md-4">
-      <label for="title" class="form-label">Title contains</label>
-      <input type="text" id="title" name="title" class="form-control" value="{{ title }}" placeholder="e.g., War">
-    </div>
-    <div class="col-md-4">
-      <label for="author" class="form-label">Author name contains</label>
-      <input type="text" id="author" name="author" class="form-control" value="{{ author }}" placeholder="e.g., Tolstoy">
-    </div>
-    <div class="col-md-2">
-      <button class="btn btn-primary w-100" type="submit">Search</button>
-    </div>
-    <div class="col-md-2">
-      <a class="btn btn-outline-secondary w-100" href="{{ url_for('favourite-recipes.index') }}">Reset</a>
-    </div>
-  </form>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F9F9FF;
+            color: #896E69;
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-    {% if favourite_recipes %}
-    <div class="table-responsive">
-      <table class="table table-striped align-middle">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <!--
-            <th>Year</th>
-            <th>Author</th>
-            -->
-            <th style="width: 1%"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for b in favourite_recipes %}
-          <tr>
-            <td>{{ b.title }}</td>
-              <!--
-            <td>{{ b.published_year or '—' }}</td>
-            <td>{{ b.author.name }}</td>
-                -->
-            <td>
-              <a href="{{ url_for('favourite-recipes.edit', favourite_recipe_id=b.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            height: 100vh;
+            padding-top: 40px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 18px 24px;
+            color: #F9F9FF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .sidebar a:hover::before {
+            left: 100%;
+        }
+
+        .sidebar a:hover {
+            background-color: rgba(249, 249, 255, 0.15);
+            border-left: 4px solid #F9F9FF;
+            padding-left: 28px;
+        }
+
+        .sidebar a i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .main {
+            margin-left: 200px;
+            flex-grow: 1;
+            transition: margin-left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main.full {
+            margin-left: 0;
+        }
+
+        .header {
+            background-color: #F9F9FF;
+            padding: 22px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        .menu-toggle {
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            color: #F9F9FF;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(142, 0, 4, 0.3);
+            font-weight: 500;
+        }
+
+        .menu-toggle:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(142, 0, 4, 0.4);
+        }
+
+        .menu-toggle:active {
+            transform: translateY(0);
+        }
+
+        .menu-toggle i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .company-name {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 50%, #FFA577 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        .content {
+            padding: 40px;
+            flex-grow: 1;
+            background-color: #F9F9FF;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info a {
+            color: #8C0004;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: rgba(142, 0, 4, 0.1);
+        }
+
+        .user-info a:hover {
+            background: rgba(142, 0, 4, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .user-greeting {
+            color: #8C0004;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: rgba(142, 0, 4, 0.1);
+        }
+
+        .logout-btn {
+            color: #8C0004;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: rgba(142, 0, 4, 0.1);
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(142, 0, 4, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 165, 119, 0.1);
+            z-index: -1;
+        }
+
+        .floating-1 {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            right: 5%;
+        }
+
+        .floating-2 {
+            width: 150px;
+            height: 150px;
+            bottom: 15%;
+            left: 5%;
+            background: rgba(142, 0, 4, 0.1);
+        }
+
+        .favourites-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 50%, #FFA577 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            color: #896E69;
+            font-size: 16px;
+            margin-bottom: 40px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(140, 0, 4, 0.1);
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h4 {
+            color: #8C0004;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #896E69;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(142, 0, 4, 0.3);
+        }
+
+        .card-recipe {
+            cursor: pointer;
+            transition: transform .2s ease, box-shadow .2s;
+            border: 1px solid rgba(140, 0, 4, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .card-recipe:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(140, 0, 4, 0.15);
+            border-color: rgba(140, 0, 4, 0.3);
+        }
+
+        .card-recipe .card-img-top {
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-recipe .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-recipe .card-title {
+            color: #8C0004;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .card-recipe .card-text {
+            color: #896E69;
+            font-size: 14px;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .btn-outline-primary {
+            border-color: #8C0004;
+            color: #8C0004;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+        }
+
+        .btn-outline-primary:hover {
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 100%);
+            border-color: #8C0004;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(142, 0, 4, 0.3);
+        }
+
+        .btn-fav {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid rgba(140, 0, 4, 0.2);
+            background: white;
+            color: #896E69;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: absolute;
+            right: 12px;
+            top: 10px;
+            z-index: 5;
+        }
+
+        .btn-fav.active {
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 100%);
+            color: white;
+            border-color: rgba(140, 0, 4, 0.3);
+            box-shadow: 0 4px 12px rgba(142, 0, 4, 0.3);
+        }
+
+        .modal-content {
+            border-radius: 16px;
+            border: none;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            color: white;
+            border-bottom: none;
+        }
+
+        .modal-title {
+            font-weight: 600;
+        }
+
+        .btn-close {
+            filter: invert(1);
+        }
+
+        .modal-body h6 {
+            color: #8C0004;
+            font-weight: 600;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .modal-body ul, .modal-body ol {
+            padding-left: 20px;
+            color: #896E69;
+        }
+
+        .modal-footer {
+            border-top: 1px solid rgba(140, 0, 4, 0.1);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #896E69 0%, #6d554f 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(109, 85, 79, 0.3);
+        }
+
+        .position-fixed {
+            position: fixed !important;
+        }
+
+        .bottom-0 {
+            bottom: 0 !important;
+        }
+
+        .end-0 {
+            right: 0 !important;
+        }
+
+        .p-3 {
+            padding: 1rem !important;
+        }
+
+        .toast {
+            max-width: 350px;
+        }
+
+        .toast-success {
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.35); }
+            70% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-fav.pop {
+            animation: pop .36s ease;
+        }
+
+        @media (max-width: 968px) {
+            .sidebar {
+                width: 180px;
+            }
+
+            .main {
+                margin-left: 180px;
+            }
+
+            .header {
+                padding: 18px 25px;
+            }
+
+            .content {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 160px;
+            }
+
+            .main {
+                margin-left: 160px;
+            }
+
+            .header {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+
+            .company-name {
+                order: 1;
+                width: 100%;
+                text-align: center;
+                margin: 10px 0;
+            }
+
+            .menu-toggle {
+                order: 2;
+            }
+
+            .user-info {
+                order: 3;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .card-recipe .card-img-top {
+                height: 140px;
+            }
+
+            .user-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card-recipe .card-img-top {
+                height: 120px;
+            }
+
+            .empty-state {
+                padding: 40px 20px;
+            }
+
+            .empty-state i {
+                font-size: 48px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="floating-element floating-1"></div>
+    <div class="floating-element floating-2"></div>
+
+
+
+    <!--
+    <div class="sidebar" id="sidebar">
+        <a href="home.html"><i class="fas fa-home"></i> Home</a>
+        <a href="recipe.html"><i class="fas fa-utensils"></i> Recipes</a>
+        <a href="favourites.html" class="active"><i class="fas fa-star"></i> Favourites</a>
+        <a href="mypage.html"><i class="fas fa-user"></i> My Profile</a>
+        <a href="contact.html"><i class="fas fa-phone-alt"></i> Contact</a>
     </div>
-  {% else %}
-    <p class="text-muted">No favourite recipes found.</p>
-  {% endif %}
-{% endblock %}
+    -->
+
+    <div class="sidebar" id="sidebar">
+        <a href="/home">🏠 Home</a>
+        <a href="/recipes">🍲 Recipes</a>
+        <a href="/favourites">⭐ Favourite recipe</a>
+        <a href="/user">👤 My page</a>
+        <a href="/contact">📞 Kontaktinformācija</a>
+    </div>
+
+
+
+    <div class="main" id="main">
+        <div class="header">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i> Menu
+            </button>
+
+            <div class="company-name">Limpa</div>
+
+            <div class="user-info" id="userInfo">
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="favourites-container">
+                <h1 class="page-title">Favourite Recipes</h1>
+                <p class="page-subtitle">Your saved recipes will appear here.</p>
+
+                <div id="favouritesRow" class="row g-3 mt-2">
+                </div>
+
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="fas fa-star"></i>
+                    <h4>No Favourite Recipes Yet</h4>
+                    <p>You haven't saved any recipes to your favourites yet.</p>
+                    <a href="recipe.html" class="btn btn-primary">Browse Recipes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="recipeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="modalTitle" class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="" class="img-fluid rounded mb-3" style="width:100%; max-height:420px; object-fit:cover;">
+                    <p id="modalShort" class="text-muted"></p>
+
+                    <h6>Ingredients</h6>
+                    <ul id="modalIngr"></ul>
+
+                    <h6>Preparation</h6>
+                    <ol id="modalSteps"></ol>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="successToast" class="toast align-items-center toast-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage">Welcome back!</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const PROFILE_KEY = 'limpa_profile_v1';
+        const CURRENT_USER_KEY = 'current_user';
+        const FAVS_KEY = 'limpa_favs_v1';
+
+        const RECIPES = [
+            { id:'b1', cat:'breakfast', title:'Quick Omelette with Veggies', image:'https://i.pinimg.com/736x/e2/91/23/e29123bfc4619c5f8f186b123b61389f.jpg', short:'A hearty omelette in 10 minutes.', ingredients:['2 eggs','1/2 onion','50g mushrooms','salt, pepper'], steps:['Chop the vegetables','Heat pan and fry vegetables','Pour beaten eggs, cook until done'] },
+            { id:'b2', cat:'breakfast', title:'Greek Yogurt Bowl', image:'https://i.pinimg.com/736x/75/c9/ab/75c9ab795c094ee9d15126fa28c6f65b.jpg', short:'Light bowl with fruits and granola.', ingredients:['200g yogurt','fresh fruits','granola','honey'], steps:['Add yogurt to bowl','Add sliced fruits and granola','Drizzle with honey'] },
+            { id:'b3', cat:'breakfast', title:'Oatmeal with Banana', image:'https://i.pinimg.com/1200x/99/86/8c/99868c372d17a28595358ad7887285f6.jpg', short:'Warm oatmeal with bananas.', ingredients:['50g oats','1 banana','200ml milk/water','cinnamon'], steps:['Cook oats with milk','Slice banana and add','Sprinkle with cinnamon'] },
+            { id:'l1', cat:'lunch', title:'Caesar Salad', image:'https://i.pinimg.com/736x/17/19/9c/17199c736fa9db346ef6f02394508516.jpg', short:'Classic romaine salad with creamy dressing.', ingredients:['Romaine lettuce','Cherry tomatoes','cucumber','Caesar dressing','Parmesan','croutons'], steps:['Chop lettuce','Add dressing and vegetables, mix','Top with cheese and croutons'] },
+            { id:'l2', cat:'lunch', title:'Seasonal Vegetable Soup', image:'https://i.pinimg.com/1200x/b8/bc/d4/b8bcd4efae715f2cbacb1c91d7c84f0d.jpg', short:'Hearty seasonal soup.', ingredients:['potatoes','carrot','celery','onion','broth'], steps:['Chop vegetables','Fry onion and garlic','Add broth, cook 20–30 minutes'] },
+            { id:'l3', cat:'lunch', title:'Tuna Sandwich', image:'https://i.pinimg.com/1200x/0f/34/e2/0f34e2ae2dee0090f03da30f3771218c.jpg', short:'Quick sandwich with tuna and veggies.', ingredients:['canned tuna','bread','lettuce','mayonnaise'], steps:['Mix tuna with mayo','Spread on bread','Add lettuce'] },
+            { id:'d1', cat:'dinner', title:'Lemon Chicken Fillet', image:'https://i.pinimg.com/736x/fe/93/a8/fe93a8aa0939fb5a3d2c22c8075846f1.jpg', short:'Juicy chicken with lemon and herbs.', ingredients:['2 chicken fillets','1 lemon','oil','seasoning'], steps:['Prepare marinade','Pan cook 5–6 min','Add lemon juice and serve'] },
+            { id:'d2', cat:'dinner', title:'Stir Fried Veggie Pasta', image:'https://i.pinimg.com/1200x/da/ce/ed/daceedb6ee65d9ab0d6b44094064a4a4.jpg', short:'Colorful vegan pasta dish.', ingredients:['pasta','zucchini','bell pepper','tomatoes'], steps:['Fry vegetables','Boil pasta','Mix and serve'] },
+            { id:'d3', cat:'dinner', title:'Steamed Salmon', image:'https://i.pinimg.com/1200x/b2/92/fc/b292fcdc3b151cd4717476e3e0f7495c.jpg', short:'Healthy salmon with dill sauce.', ingredients:['salmon fillet','lemon','dill','salt'], steps:['Steam salmon','Prepare sauce','Serve with veggies'] }
+        ];
+
+        function loadProfile() {
+            let profile;
+            try {
+                profile = JSON.parse(localStorage.getItem(PROFILE_KEY));
+            } catch(e) {
+                profile = null;
+            }
+
+            if (!profile) {
+                const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
+                if (currentUser) {
+                    profile = {
+                        name: currentUser.firstName || 'User',
+                        email: currentUser.email || 'user@example.com',
+                        bio: '',
+                        preferences: [],
+                        joinDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
+                    };
+                    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+                }
+            }
+
+            return profile;
+        }
+
+        function getFavs(){
+            try {
+                return JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
+            } catch(e) {
+                return [];
+            }
+        }
+
+        function setFavs(arr){
+            localStorage.setItem(FAVS_KEY, JSON.stringify(Array.from(new Set(arr))));
+        }
+
+        function popButton(btn){
+            btn.classList.remove('pop');
+            void btn.offsetWidth;
+            btn.classList.add('pop');
+        }
+
+        function toggleFavorite(id, btn){
+            const favs = getFavs();
+            const idx = favs.indexOf(id);
+            if(idx === -1){
+                favs.push(id);
+                setFavs(favs);
+                btn.classList.add('active');
+            } else {
+                favs.splice(idx,1);
+                setFavs(favs);
+                btn.classList.remove('active');
+            }
+            popButton(btn);
+
+            loadFavourites();
+        }
+
+        function loadFavourites(){
+            const favs = getFavs();
+            const favouritesRow = document.getElementById('favouritesRow');
+            const emptyState = document.getElementById('emptyState');
+
+            if (favs.length === 0) {
+                favouritesRow.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            favouritesRow.style.display = 'flex';
+            emptyState.style.display = 'none';
+            favouritesRow.innerHTML = '';
+
+            const favouriteRecipes = RECIPES.filter(recipe => favs.includes(recipe.id));
+
+            favouriteRecipes.forEach(r => {
+                const col = document.createElement('div');
+                col.className = 'col-sm-6 col-md-4 col-lg-4';
+                col.innerHTML = `
+                    <div class="card card-recipe h-100 position-relative" data-id="${r.id}">
+                        <div style="position:relative;">
+                            <img src="${r.image}" class="card-img-top" alt="${escapeHtml(r.title)}">
+                            <button class="btn-fav active" data-id="${r.id}" title="Remove from favourites">★</button>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="card-title">${escapeHtml(r.title)}</h6>
+                            <p class="card-text">${escapeHtml(r.short)}</p>
+                            <div class="mt-auto">
+                                <button class="btn btn-outline-primary" data-id="${r.id}">View Recipe</button>
+                            </div>
+                        </div>
+                    </div>`;
+                favouritesRow.appendChild(col);
+
+                const favBtn = col.querySelector('.btn-fav');
+                favBtn.addEventListener('click', (ev)=>{
+                    ev.stopPropagation();
+                    toggleFavorite(r.id, favBtn);
+                });
+
+                const cardRoot = col.querySelector('.card-recipe');
+                cardRoot.addEventListener('click', (ev)=>{
+                    if(ev.target.closest('.btn-fav')) return;
+                    openRecipeModal(r.id);
+                });
+
+                const viewBtn = col.querySelector('button.btn-outline-primary');
+                viewBtn.addEventListener('click', (ev)=>{
+                    ev.stopPropagation();
+                    openRecipeModal(r.id);
+                });
+            });
+        }
+
+        function escapeHtml(s){
+            if(!s) return '';
+            return s.replaceAll('&','&amp;')
+                    .replaceAll('<','&lt;')
+                    .replaceAll('>','&gt;')
+                    .replaceAll('"','&quot;');
+        }
+
+        function openRecipeModal(id){
+            const r = RECIPES.find(x => x.id === id);
+            if(!r) return;
+
+            document.getElementById('modalTitle').textContent = r.title;
+            document.getElementById('modalImage').src = r.image;
+            document.getElementById('modalImage').alt = r.title;
+            document.getElementById('modalShort').textContent = r.short;
+
+            const ingr = document.getElementById('modalIngr');
+            ingr.innerHTML = '';
+            (r.ingredients || []).forEach(i => {
+                const li = document.createElement('li');
+                li.textContent = i;
+                ingr.appendChild(li);
+            });
+
+            const steps = document.getElementById('modalSteps');
+            steps.innerHTML = '';
+            (r.steps || []).forEach(s => {
+                const li = document.createElement('li');
+                li.textContent = s;
+                steps.appendChild(li);
+            });
+
+            const modal = new bootstrap.Modal(document.getElementById('recipeModal'), {});
+            modal.show();
+        }
+
+        function logout() {
+            localStorage.removeItem(CURRENT_USER_KEY);
+
+            const toastElement = document.getElementById('successToast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = 'You have been logged out successfully.';
+
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            const main = document.getElementById("main");
+
+            sidebar.classList.toggle("hidden");
+            main.classList.toggle("full");
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const userInfoDiv = document.getElementById('userInfo');
+            const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
+            const profile = loadProfile();
+
+            if (currentUser && profile) {
+                userInfoDiv.innerHTML = `
+                    <div class="user-greeting">Welcome, ${profile.name}!</div>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                `;
+
+                const toastElement = document.getElementById('successToast');
+                const toastMessage = document.getElementById('toastMessage');
+                toastMessage.textContent = `Welcome back to Limpa, ${profile.name}!`;
+
+                const toast = new bootstrap.Toast(toastElement);
+                toast.show();
+
+            } else {
+                userInfoDiv.innerHTML = `
+                    <a href="register.html">Register</a>
+                    <a href="login.html">Login</a>
+                `;
+            }
+
+            loadFavourites();
+
+            const currentPage = window.location.pathname.split('/').pop();
+            const sidebarLinks = document.querySelectorAll('.sidebar a');
+
+            sidebarLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage ||
+                    (currentPage === '' && linkPage === 'index.html') ||
+                    (currentPage === 'index.html' && linkPage === 'index.html')) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

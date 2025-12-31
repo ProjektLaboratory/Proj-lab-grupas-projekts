@@ -41,6 +41,11 @@ def create_app():
     app.register_blueprint(new_contact_bp)
     from .web.new_about_us import new_about_us_bp
     app.register_blueprint(new_about_us_bp)
+    from .web.new_recipe import new_recipe_bp
+    app.register_blueprint(new_recipe_bp)
+
+    from .web.home import home_bp
+    app.register_blueprint(home_bp)
 
 
     # Register api endpoints

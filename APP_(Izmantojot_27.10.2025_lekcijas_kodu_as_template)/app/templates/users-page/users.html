@@ -1,5 +1,1327 @@
-{% extends "home.html" %}
-{% block content %}
-<h2>My Page</h2>
-<p>User info or settings go here.</p>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpa - My Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F9F9FF;
+            color: #896E69;
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            height: 100vh;
+            padding-top: 40px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: transform 0.4s;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 18px 24px;
+            color: #F9F9FF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .sidebar a:hover::before {
+            left: 100%;
+        }
+
+        .sidebar a:hover {
+            background-color: rgba(249, 249, 255, 0.15);
+            border-left: 4px solid #F9F9FF;
+            padding-left: 28px;
+        }
+
+        .sidebar a i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .main {
+            margin-left: 200px;
+            flex-grow: 1;
+            transition: margin-left 0.4s;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main.full {
+            margin-left: 0;
+        }
+
+        .header {
+            background-color: #F9F9FF;
+            padding: 22px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        .menu-toggle {
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            color: #F9F9FF;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(142, 0, 4, 0.3);
+            font-weight: 500;
+        }
+
+        .menu-toggle:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(142, 0, 4, 0.4);
+        }
+
+        .menu-toggle:active {
+            transform: translateY(0);
+        }
+
+        .menu-toggle i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .company-name {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 50%, #FFA577 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        .content {
+            padding: 40px;
+            flex-grow: 1;
+            background-color: #F9F9FF;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info a {
+            color: #8C0004;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: rgba(142, 0, 4, 0.1);
+        }
+
+        .user-info a:hover {
+            background: rgba(142, 0, 4, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .user-greeting {
+            color: #8C0004;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: rgba(142, 0, 4, 0.1);
+        }
+
+        .logout-btn {
+            color: #8C0004;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: rgba(142, 0, 4, 0.1);
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(142, 0, 4, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 165, 119, 0.1);
+            z-index: -1;
+        }
+
+        .floating-1 {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            right: 5%;
+        }
+
+        .floating-2 {
+            width: 150px;
+            height: 150px;
+            bottom: 15%;
+            left: 5%;
+            background: rgba(142, 0, 4, 0.1);
+        }
+
+        .profile-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 50%, #FFA577 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            color: #896E69;
+            font-size: 16px;
+            margin-bottom: 40px;
+        }
+
+        .profile-card {
+            background-color: rgb(255, 255, 255);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgb(255, 255, 255);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .profile-avatar-container {
+            position: relative;
+            margin-right: 25px;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            color: white;
+            font-size: 48px;
+        }
+
+        .avatar-upload-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 100%);
+            color: white;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .avatar-upload-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(142, 0, 4, 0.3);
+        }
+
+        .avatar-upload-input {
+            display: none;
+        }
+
+        .profile-info {
+            flex: 1;
+            min-width: 200px;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .profile-info h3 {
+            color: #8C0004;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 24px;
+            line-height: 1.3;
+        }
+
+        .profile-info p {
+            color: #896E69;
+            margin-bottom: 5px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .profile-card h5 {
+            color: #b63b44db;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .profile-card h5::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            border-radius: 2px;
+        }
+
+        .profile-card h6 {
+            color: #8C0004;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .form-label {
+            color: #896E69;
+            font-weight: 500;
+        }
+
+        .form-control {
+            border: 1px solid rgba(140, 0, 4, 0.2);
+            border-radius: 8px;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #8C0004;
+            box-shadow: 0 0 0 0.2rem rgba(140, 0, 4, 0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(142, 0, 4, 0.4);
+        }
+
+        .btn-outline-primary {
+            border: 2px solid #8C0004;
+            color: #8C0004;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-outline-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(140, 0, 4, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-outline-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-outline-primary:hover {
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 100%);
+            border-color: #8C0004;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(142, 0, 4, 0.3);
+        }
+
+        .btn-outline-secondary {
+            border: 2px solid #896E69;
+            color: #896E69;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .btn-outline-secondary:hover {
+            background: linear-gradient(135deg, #896E69 0%, #6d554f 100%);
+            border-color: #896E69;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(109, 85, 79, 0.3);
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            border: none;
+            color: white;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-gradient:hover::before {
+            left: 100%;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(142, 0, 4, 0.4);
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, rgba(255, 165, 119, 0.1) 0%, rgba(182, 59, 68, 0.1) 50%, rgba(140, 0, 4, 0.1) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(140, 0, 4, 0.1);
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(140, 0, 4, 0.15);
+        }
+
+        .stats-number {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 50%, #FFA577 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .stats-label {
+            color: #896E69;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .preference-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .preference-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(142, 0, 4, 0.3);
+        }
+
+        .preference-badge.selected {
+            background: linear-gradient(135deg, #8C0004 0%, #6d0003 100%);
+            box-shadow: 0 4px 12px rgba(142, 0, 4, 0.3);
+        }
+
+        .toast-success {
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(140, 0, 4, 0.1);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .settings-item:hover {
+            background: linear-gradient(135deg, rgba(255, 165, 119, 0.1) 0%, rgba(182, 59, 68, 0.1) 50%, rgba(140, 0, 4, 0.1) 100%);
+            transform: translateX(5px);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .settings-item i {
+            margin-right: 15px;
+            font-size: 18px;
+            color: #8C0004;
+            width: 24px;
+            text-align: center;
+        }
+
+        .settings-item span {
+            flex-grow: 1;
+        }
+
+        .settings-item .arrow {
+            color: #896E69;
+        }
+
+        @media (max-width: 1200px) {
+            .profile-info h3 {
+                font-size: 22px;
+            }
+
+            .profile-info p {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 180px;
+            }
+
+            .main {
+                margin-left: 180px;
+            }
+
+            .header {
+                padding: 18px 25px;
+            }
+
+            .content {
+                padding: 25px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-avatar-container {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .profile-info {
+                text-align: center;
+                width: 100%;
+            }
+
+            .profile-info h3 {
+                font-size: 24px;
+            }
+
+            .profile-info p {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 160px;
+            }
+
+            .main {
+                margin-left: 160px;
+            }
+
+            .header {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+
+            .company-name {
+                order: 1;
+                width: 100%;
+                text-align: center;
+                margin: 10px 0;
+            }
+
+            .menu-toggle {
+                order: 2;
+            }
+
+            .user-info {
+                order: 3;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .profile-avatar {
+                width: 100px;
+                height: 100px;
+            }
+
+            .avatar-upload-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            .profile-info h3 {
+                font-size: 22px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .profile-card h5 {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .sidebar {
+                width: 140px;
+            }
+
+            .main {
+                margin-left: 140px;
+            }
+
+            .header {
+                padding: 12px 15px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .profile-avatar {
+                width: 90px;
+                height: 90px;
+            }
+
+            .stats-number {
+                font-size: 28px;
+            }
+
+            .btn-primary, .btn-gradient, .btn-outline-primary {
+                padding: 10px 18px;
+                font-size: 14px;
+            }
+
+            .profile-card {
+                padding: 20px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .profile-info h3 {
+                font-size: 20px;
+            }
+
+            .profile-info p {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .sidebar {
+                width: 130px;
+            }
+
+            .main {
+                margin-left: 130px;
+            }
+
+            .menu-toggle {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+
+            .user-info a {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            .profile-avatar {
+                width: 80px;
+                height: 80px;
+            }
+
+            .profile-avatar-placeholder {
+                font-size: 36px;
+            }
+
+            .profile-info h3 {
+                font-size: 18px;
+            }
+
+            .profile-info p {
+                font-size: 12px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="floating-element floating-1"></div>
+    <div class="floating-element floating-2"></div>
+
+
+
+    <!--
+    <div class="sidebar" id="sidebar">
+        <a href="home.html"><i class="fas fa-home"></i> Home</a>
+        <a href="recipe.html"><i class="fas fa-utensils"></i> Recipes</a>
+        <a href="favourites.html"><i class="fas fa-star"></i> Favourites</a>
+        <a href="mypage.html" class="active"><i class="fas fa-user"></i> My Profile</a>
+        <a href="contact.html"><i class="fas fa-phone-alt"></i> Contact</a>
+    </div>
+    -->
+
+    <div class="sidebar" id="sidebar">
+        <a href="/home">🏠 Home</a>
+        <a href="/recipes">🍲 Recipes</a>
+        <a href="/favourites">⭐ Favourite recipe</a>
+        <a href="/user">👤 My page</a>
+        <a href="/contact">📞 Kontaktinformācija</a>
+    </div>
+
+
+
+    <div class="main" id="main">
+        <div class="header">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i> Menu
+            </button>
+
+            <div class="company-name">Limpa</div>
+
+            <div class="user-info" id="userInfo">
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="profile-container">
+                <h1 class="page-title">My Profile</h1>
+                <p class="page-subtitle">Manage your account settings and preferences.</p>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="profile-card">
+                            <div class="profile-header">
+                                <div class="profile-avatar-container">
+                                    <div class="profile-avatar" id="profileAvatar">
+                                        <div class="profile-avatar-placeholder" id="avatarPlaceholder">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <img id="avatarImage" src="" alt="Profile Photo" style="display: none;">
+                                    </div>
+                                    <div class="avatar-upload-btn" id="avatarUploadBtn">
+                                        <i class="fas fa-camera"></i>
+                                    </div>
+                                    <input type="file" id="avatarUploadInput" class="avatar-upload-input" accept="image/*">
+                                </div>
+                                <div class="profile-info">
+                                    <h3 id="displayName">User</h3>
+                                    <p id="displayEmail">user@example.com</p>
+                                    <p id="displayJoinDate">Member since 2023</p>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-4">
+                                <div class="col-6">
+                                    <div class="stats-card">
+                                        <div class="stats-number" id="favCount">0</div>
+                                        <div class="stats-label">Favourites</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="stats-card">
+                                        <div class="stats-number" id="recipeCount">9</div>
+                                        <div class="stats-label">Recipes Viewed</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h6>Dietary Preferences</h6>
+                            <div id="preferencesList">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="profile-card">
+                            <h5>Edit Profile Information</h5>
+
+                            <form id="profileForm" onsubmit="saveProfile(event)">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Full Name</label>
+                                        <input type="text" id="inputFullName" class="form-control" placeholder="Your full name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email Address</label>
+                                        <input type="email" id="inputProfileEmail" class="form-control" placeholder="your@email.com">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 mt-3">
+                                    <label class="form-label">Bio</label>
+                                    <textarea id="inputBio" class="form-control" rows="3" placeholder="Tell us about yourself..."></textarea>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label">Dietary Preferences</label>
+                                    <div class="d-flex flex-wrap gap-2 mb-3">
+                                        <button type="button" class="preference-badge" data-pref="vegetarian">Vegetarian</button>
+                                        <button type="button" class="preference-badge" data-pref="vegan">Vegan</button>
+                                        <button type="button" class="preference-badge" data-pref="gluten-free">Gluten-Free</button>
+                                        <button type="button" class="preference-badge" data-pref="dairy-free">Dairy-Free</button>
+                                        <button type="button" class="preference-badge" data-pref="keto">Keto</button>
+                                        <button type="button" class="preference-badge" data-pref="paleo">Paleo</button>
+                                        <button type="button" class="preference-badge" data-pref="low-carb">Low-Carb</button>
+                                        <button type="button" class="preference-badge" data-pref="mediterranean">Mediterranean</button>
+                                    </div>
+                                    <input type="text" id="inputPreferences" class="form-control" placeholder="Selected preferences will appear here" readonly>
+                                </div>
+
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">
+                                        <i class="fas fa-redo me-1"></i> Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-gradient flex-grow-1">
+                                        <i class="fas fa-save me-1"></i> Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="profile-card mt-4">
+                            <h5>Account Settings</h5>
+                            <div class="mt-3">
+                                <a href="#" class="settings-item">
+                                    <i class="fas fa-bell"></i>
+                                    <span>Notification Preferences</span>
+                                    <i class="fas fa-chevron-right arrow"></i>
+                                </a>
+                                <a href="#" class="settings-item">
+                                    <i class="fas fa-lock"></i>
+                                    <span>Privacy & Security</span>
+                                    <i class="fas fa-chevron-right arrow"></i>
+                                </a>
+                                <a href="#" class="settings-item">
+                                    <i class="fas fa-palette"></i>
+                                    <span>Theme & Appearance</span>
+                                    <i class="fas fa-chevron-right arrow"></i>
+                                </a>
+                                <a href="#" class="settings-item" id="logoutBtn">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="profile-card mt-4">
+                            <h5>Quick Actions</h5>
+                            <div class="row g-3 mt-3">
+                                <div class="col-md-6">
+                                    <a href="recipe.html" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-utensils me-2"></i> Browse Recipes
+                                    </a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="favourites.html" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-star me-2"></i> View Favourites
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="successToast" class="toast align-items-center toast-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage">Profile updated successfully!</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deletePhotoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Remove Profile Photo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to remove your profile photo? The default avatar will be shown instead.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-gradient" id="confirmDeletePhoto">Remove Photo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        const PROFILE_KEY = 'limpa_profile_v1';
+        const FAVS_KEY = 'limpa_favs_v1';
+        const AVATAR_KEY = 'limpa_avatar_v1';
+        const CURRENT_USER_KEY = 'current_user';
+        const RECIPES_KEY = 'limpa_recipes_v1';
+
+        const defaultProfile = {
+            name: 'User',
+            email: 'user@example.com',
+            bio: '',
+            preferences: [],
+            joinDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
+        };
+
+        function logout() {
+            localStorage.removeItem(CURRENT_USER_KEY);
+
+            const toastElement = document.getElementById('successToast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = 'You have been logged out successfully.';
+
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        }
+
+        function loadProfile() {
+            let profile;
+            try {
+                profile = JSON.parse(localStorage.getItem(PROFILE_KEY));
+            } catch(e) {
+                profile = null;
+            }
+
+            if (!profile) {
+                const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
+                if (currentUser) {
+                    profile = {
+                        name: currentUser.firstName || 'User',
+                        email: currentUser.email || 'user@example.com',
+                        bio: '',
+                        preferences: [],
+                        joinDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
+                    };
+                    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+                } else {
+                    profile = defaultProfile;
+                }
+            }
+
+            return profile;
+        }
+
+        function saveProfileToStorage(profile) {
+            localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+        }
+
+        function loadAvatar() {
+            const avatarData = localStorage.getItem(AVATAR_KEY);
+            const avatarImage = document.getElementById('avatarImage');
+            const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+
+            if (avatarData) {
+                avatarImage.src = avatarData;
+                avatarImage.style.display = 'block';
+                avatarPlaceholder.style.display = 'none';
+            } else {
+                avatarImage.style.display = 'none';
+                avatarPlaceholder.style.display = 'flex';
+            }
+        }
+
+        function saveAvatarToStorage(dataUrl) {
+            localStorage.setItem(AVATAR_KEY, dataUrl);
+        }
+
+        function deleteAvatar() {
+            localStorage.removeItem(AVATAR_KEY);
+            loadAvatar();
+        }
+
+        function updateProfileDisplay() {
+            const profile = loadProfile();
+            const favs = getFavourites();
+            const recipes = JSON.parse(localStorage.getItem(RECIPES_KEY) || '[]');
+
+            document.getElementById('displayName').textContent = profile.name;
+            document.getElementById('displayEmail').textContent = profile.email;
+            document.getElementById('displayJoinDate').textContent = `Member since ${profile.joinDate}`;
+
+            document.getElementById('inputFullName').value = profile.name;
+            document.getElementById('inputProfileEmail').value = profile.email;
+            document.getElementById('inputBio').value = profile.bio || '';
+            document.getElementById('inputPreferences').value = profile.preferences.join(', ');
+
+            document.getElementById('favCount').textContent = favs.length;
+            document.getElementById('recipeCount').textContent = recipes.length;
+
+            updatePreferencesList(profile.preferences);
+
+            highlightSelectedPreferences(profile.preferences);
+
+            loadAvatar();
+        }
+
+        function getFavourites() {
+            try {
+                return JSON.parse(localStorage.getItem(FAVS_KEY) || '[]');
+            } catch(e) {
+                return [];
+            }
+        }
+
+        function updatePreferencesList(preferences) {
+            const preferencesList = document.getElementById('preferencesList');
+            preferencesList.innerHTML = '';
+
+            if (preferences.length === 0) {
+                preferencesList.innerHTML = '<p class="text-muted small">No preferences selected yet.</p>';
+                return;
+            }
+
+            preferences.forEach(pref => {
+                const badge = document.createElement('span');
+                badge.className = 'preference-badge selected';
+                badge.textContent = pref;
+                badge.style.marginBottom = '8px';
+                preferencesList.appendChild(badge);
+            });
+        }
+
+        function highlightSelectedPreferences(selectedPreferences) {
+            const preferenceButtons = document.querySelectorAll('.preference-badge[data-pref]');
+            preferenceButtons.forEach(button => {
+                const prefText = button.textContent;
+                if (selectedPreferences.includes(prefText)) {
+                    button.classList.add('selected');
+                } else {
+                    button.classList.remove('selected');
+                }
+            });
+        }
+
+        function saveProfile(event) {
+            event.preventDefault();
+
+            const profile = loadProfile();
+
+            profile.name = document.getElementById('inputFullName').value.trim() || 'User';
+            profile.email = document.getElementById('inputProfileEmail').value.trim() || 'user@example.com';
+            profile.bio = document.getElementById('inputBio').value.trim();
+
+            const prefsInput = document.getElementById('inputPreferences').value;
+            profile.preferences = prefsInput ? prefsInput.split(',').map(p => p.trim()) : [];
+
+            saveProfileToStorage(profile);
+
+            updateProfileDisplay();
+
+            const toast = new bootstrap.Toast(document.getElementById('successToast'));
+            document.getElementById('toastMessage').textContent = 'Profile updated successfully!';
+            toast.show();
+        }
+
+        function resetForm() {
+            updateProfileDisplay();
+
+            const toast = new bootstrap.Toast(document.getElementById('successToast'));
+            document.getElementById('toastMessage').textContent = 'Form reset to saved values!';
+            toast.show();
+        }
+
+        function handleAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file (JPG, PNG, GIF, etc.)');
+                return;
+            }
+
+            if (file.size > 2 * 1024 * 1024) {
+                alert('Image size should be less than 2MB');
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const avatarImage = document.getElementById('avatarImage');
+                const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+
+                avatarImage.src = e.target.result;
+                avatarImage.style.display = 'block';
+                avatarPlaceholder.style.display = 'none';
+
+                saveAvatarToStorage(e.target.result);
+
+                const toast = new bootstrap.Toast(document.getElementById('successToast'));
+                document.getElementById('toastMessage').textContent = 'Profile photo updated!';
+                toast.show();
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function showDeletePhotoConfirmation() {
+            const deletePhotoModal = new bootstrap.Modal(document.getElementById('deletePhotoModal'));
+            deletePhotoModal.show();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const userInfoDiv = document.getElementById('userInfo');
+            const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
+            const profile = loadProfile();
+
+            if (currentUser && profile) {
+                userInfoDiv.innerHTML = `
+                    <div class="user-greeting">Welcome, ${profile.name}!</div>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                `;
+
+
+                const toastElement = document.getElementById('successToast');
+                const toastMessage = document.getElementById('toastMessage');
+                toastMessage.textContent = `Welcome back to Limpa, ${profile.name}!`;
+
+                const toast = new bootstrap.Toast(toastElement);
+                toast.show();
+
+            } else {
+                userInfoDiv.innerHTML = `
+                    <a href="register.html">Register</a>
+                    <a href="login.html">Login</a>
+                `;
+            }
+
+            updateProfileDisplay();
+
+            const preferenceButtons = document.querySelectorAll('.preference-badge[data-pref]');
+            const prefsInput = document.getElementById('inputPreferences');
+
+            preferenceButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const prefText = button.textContent;
+                    let currentPrefs = prefsInput.value ? prefsInput.value.split(',').map(p => p.trim()) : [];
+
+                    const index = currentPrefs.indexOf(prefText);
+                    if (index === -1) {
+                        currentPrefs.push(prefText);
+                        button.classList.add('selected');
+                    } else {
+                        currentPrefs.splice(index, 1);
+                        button.classList.remove('selected');
+                    }
+
+                    prefsInput.value = currentPrefs.join(', ');
+                });
+            });
+
+            const avatarUploadBtn = document.getElementById('avatarUploadBtn');
+            const avatarUploadInput = document.getElementById('avatarUploadInput');
+
+            avatarUploadBtn.addEventListener('click', () => {
+                avatarUploadInput.click();
+            });
+
+            avatarUploadInput.addEventListener('change', handleAvatarUpload);
+
+            const avatarContainer = document.getElementById('profileAvatar');
+            avatarContainer.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                showDeletePhotoConfirmation();
+            });
+
+            document.getElementById('confirmDeletePhoto').addEventListener('click', () => {
+                deleteAvatar();
+
+                const deletePhotoModal = bootstrap.Modal.getInstance(document.getElementById('deletePhotoModal'));
+                deletePhotoModal.hide();
+
+                const toast = new bootstrap.Toast(document.getElementById('successToast'));
+                document.getElementById('toastMessage').textContent = 'Profile photo removed!';
+                toast.show();
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+
+            const currentPage = window.location.pathname.split('/').pop();
+            const sidebarLinks = document.querySelectorAll('.sidebar a');
+
+            sidebarLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage ||
+                    (currentPage === '' && linkPage === 'index.html') ||
+                    (currentPage === 'index.html' && linkPage === 'index.html')) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        });
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            const main = document.getElementById("main");
+
+            sidebar.classList.toggle("hidden");
+            main.classList.toggle("full");
+        }
+    </script>
+</body>
+</html>

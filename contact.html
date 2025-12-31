@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpa - Company Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F9F9FF;
+            color: #896E69;
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            height: 100vh;
+            padding-top: 40px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+        
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 18px 24px;
+            color: #F9F9FF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .sidebar a:hover::before {
+            left: 100%;
+        }
+        
+        .sidebar a:hover {
+            background-color: rgba(249, 249, 255, 0.15);
+            border-left: 4px solid #F9F9FF;
+            padding-left: 28px;
+        }
+        
+        .sidebar a i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main {
+            margin-left: 200px;
+            flex-grow: 1;
+            transition: margin-left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .main.full {
+            margin-left: 0;
+        }
+        
+        .header {
+            background-color: #F9F9FF;
+            padding: 22px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .menu-toggle {
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            color: #F9F9FF;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(142, 0, 4, 0.3);
+            font-weight: 500;
+        }
+        
+        .menu-toggle:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(142, 0, 4, 0.4);
+        }
+        
+        .menu-toggle:active {
+            transform: translateY(0);
+        }
+        
+        .menu-toggle i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .company-name {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 50%, #FFA577 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+        
+        .content {
+            padding: 40px;
+            flex-grow: 1;
+            background-color: #F9F9FF;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-info a {
+            color: #8C0004;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: rgba(142, 0, 4, 0.1);
+        }
+        
+        .user-info a:hover {
+            background: rgba(142, 0, 4, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .user-greeting {
+            color: #8C0004;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: rgba(142, 0, 4, 0.1);
+        }
+        
+        .logout-btn {
+            color: #8C0004;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: rgba(142, 0, 4, 0.1);
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(142, 0, 4, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .demo-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .limpa-card {
+            background-color: rgb(255, 255, 255);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgb(255, 255, 255);
+        }
+        
+        .limpa-card h6 {
+            color: #8C0004;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        .limpa-card h6::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            border-radius: 2px;
+        }
+        
+        .limpa-card h5 {
+            color: #b63b44db;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        .limpa-card h5::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(135deg, #FFA577 0%, #b63b44db 50%, #8C0004 100%);
+            border-radius: 2px;
+        }
+        
+        .form-label {
+            color: #896E69;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            border: 1px solid rgba(140, 0, 4, 0.2);
+            border-radius: 8px;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #8C0004;
+            box-shadow: 0 0 0 0.2rem rgba(140, 0, 4, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(142, 0, 4, 0.3);
+        }
+        
+        .btn-outline-secondary {
+            border-color: #896E69;
+            color: #896E69;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-secondary:hover {
+            background-color: #896E69;
+            border-color: #896E69;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline-primary {
+            border-color: #8C0004;
+            color: #8C0004;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: #8C0004;
+            border-color: #8C0004;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .project-title {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 50%, #FFA577 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .project-subtitle {
+            color: #896E69;
+            font-size: 16px;
+            margin-bottom: 0;
+        }
+        
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 165, 119, 0.1);
+            z-index: -1;
+        }
+        
+        .floating-1 {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            right: 5%;
+        }
+        
+        .floating-2 {
+            width: 150px;
+            height: 150px;
+            bottom: 15%;
+            left: 5%;
+            background: rgba(142, 0, 4, 0.1);
+        }
+    
+        .position-fixed {
+            position: fixed !important;
+        }
+        
+        .bottom-0 {
+            bottom: 0 !important;
+        }
+        
+        .end-0 {
+            right: 0 !important;
+        }
+        
+        .p-3 {
+            padding: 1rem !important;
+        }
+        
+        .toast {
+            max-width: 350px;
+        }
+        
+        .toast-success {
+            background: linear-gradient(135deg, #8C0004 0%, #b63b44db 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+        
+        @media (max-width: 968px) {
+            .sidebar {
+                width: 180px;
+            }
+            
+            .main {
+                margin-left: 180px;
+            }
+            
+            .header {
+                padding: 18px 25px;
+            }
+            
+            .content {
+                padding: 25px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 160px;
+            }
+            
+            .main {
+                margin-left: 160px;
+            }
+            
+            .header {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+            
+            .company-name {
+                order: 1;
+                width: 100%;
+                text-align: center;
+                margin: 10px 0;
+            }
+            
+            .menu-toggle {
+                order: 2;
+            }
+            
+            .user-info {
+                order: 3;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="floating-element floating-1"></div>
+    <div class="floating-element floating-2"></div>
+    
+    <div class="sidebar" id="sidebar">
+        <a href="home.html"><i class="fas fa-home"></i> Home</a>
+        <a href="recipe.html"><i class="fas fa-utensils"></i> Recipes</a>
+        <a href="favourites.html"><i class="fas fa-star"></i> Favourites</a>
+        <a href="mypage.html"><i class="fas fa-user"></i> My Profile</a>
+        <a href="contact.html" class="active"><i class="fas fa-phone-alt"></i> Contact</a>
+    </div>
+
+    <div class="main" id="main">
+        <div class="header">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i> Menu
+            </button>
+
+            <div class="company-name">Limpa</div>
+            <div class="user-info" id="userInfo">
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="demo-content">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div>
+                        <h1 class="project-title">Limpa</h1>
+                        <p class="project-subtitle">Personalized meal generator by preferences, cuisine type, and ingredients fast, smart, and customized.</p>
+                    </div>
+                    <div class="text-end">
+                        <p class="mb-1" style="color: #896E69;">Official email:</p>
+                        <a id="projectEmail" href="mailto:info@limpa.lv" class="btn btn-outline-primary btn-sm">info@limpa.lv</a>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="limpa-card">
+                            <h6>Company Details</h6>
+
+                            <div class="mb-2">
+                                <label class="form-label small">Company Name</label>
+                                <input id="bizName" class="form-control form-control-sm" placeholder="LLC / Name">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small">Registration No.</label>
+                                <input id="bizReg" class="form-control form-control-sm" placeholder="123456789">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small">VAT No.</label>
+                                <input id="bizVAT" class="form-control form-control-sm" placeholder="LV12345678901">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small">Address</label>
+                                <input id="bizAddr" class="form-control form-control-sm" placeholder="Street, City">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small">Phone</label>
+                                <input id="bizPhone" class="form-control form-control-sm" placeholder="+371 2...">
+                            </div>
+
+                            <div class="d-grid mt-2">
+                                <button id="saveBiz" class="btn btn-primary btn-sm">Save Company Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="limpa-card shadow-sm">
+                            <h5>Contact Us</h5>
+
+                            <form id="contactForm" onsubmit="fakeSend(event)">
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <label class="form-label small">Name</label>
+                                        <input id="inputName" type="text" class="form-control form-control-sm" placeholder="Your name" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small">Email</label>
+                                        <input id="inputEmail" type="email" class="form-control form-control-sm" placeholder="your@email.com" required>
+                                    </div>
+                                </div>
+
+                                <div class="mb-2 mt-2">
+                                    <label class="form-label small">Subject</label>
+                                    <input id="inputSubject" class="form-control form-control-sm" placeholder="Order / Question">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label small">Message</label>
+                                    <textarea id="inputMessage" class="form-control form-control-sm" rows="4" placeholder="Type your message here..." required></textarea>
+                                </div>
+
+                                <div class="d-flex gap-2">
+                                    <button type="button" id="prefillProfile" class="btn btn-outline-secondary btn-sm">Fill from Profile</button>
+                                    <button type="submit" class="btn btn-primary btn-sm flex-grow-1">Send</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="successToast" class="toast align-items-center toast-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage">Thank you! This is a demo, messages are not actually sent.</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const LS_BIZ = 'limpa_biz';
+        const PROFILE_KEY = 'limpa_profile_v1';
+        const CURRENT_USER_KEY = 'current_user';
+
+        function loadProfile() {
+            let profile;
+            try {
+                profile = JSON.parse(localStorage.getItem(PROFILE_KEY));
+            } catch(e) {
+                profile = null;
+            }
+            
+            if (!profile) {
+                const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
+                if (currentUser) {
+                    profile = {
+                        name: currentUser.firstName || 'User',
+                        email: currentUser.email || 'user@example.com',
+                        bio: '',
+                        preferences: [],
+                        joinDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
+                    };
+                    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+                }
+            }
+            
+            return profile;
+        }
+
+        function logout() {
+            localStorage.removeItem(CURRENT_USER_KEY);
+
+            const toastElement = document.getElementById('successToast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = 'You have been logged out successfully.';
+            
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const userInfoDiv = document.getElementById('userInfo');
+            const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
+            const profile = loadProfile();
+            
+            if (currentUser && profile) {
+                userInfoDiv.innerHTML = `
+                    <div class="user-greeting">Welcome, ${profile.name}!</div>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                `;
+
+                const toastElement = document.getElementById('successToast');
+                const toastMessage = document.getElementById('toastMessage');
+                toastMessage.textContent = `Welcome back to Limpa, ${profile.name}!`;
+                
+                const toast = new bootstrap.Toast(toastElement);
+                toast.show();
+                
+            } else {
+                userInfoDiv.innerHTML = `
+                    <a href="register.html">Register</a>
+                    <a href="login.html">Login</a>
+                `;
+            }
+
+            loadBiz();
+            loadProfileToInputs();
+
+            document.getElementById('saveBiz').addEventListener('click', saveBiz);
+            document.getElementById('prefillProfile').addEventListener('click', prefillFromProfile);
+
+            const currentPage = window.location.pathname.split('/').pop();
+            const sidebarLinks = document.querySelectorAll('.sidebar a');
+            
+            sidebarLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage || 
+                    (currentPage === '' && linkPage === 'index.html') ||
+                    (currentPage === 'index.html' && linkPage === 'index.html')) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        });
+
+        function loadBiz(){
+            const stored = JSON.parse(localStorage.getItem(LS_BIZ) || '{}');
+            const defaults = {
+                name: 'Limpa',
+                reg: '',
+                vat: '',
+                addr: '',
+                phone: ''
+            };
+            const b = Object.assign({}, defaults, stored);
+
+            document.getElementById('bizName').value = b.name || '';
+            document.getElementById('bizReg').value = b.reg || '';
+            document.getElementById('bizVAT').value = b.vat || '';
+            document.getElementById('bizAddr').value = b.addr || '';
+            document.getElementById('bizPhone').value = b.phone || '';
+
+            const emailEl = document.getElementById('projectEmail');
+            emailEl.href = 'mailto:info@limpa.lv';
+            emailEl.textContent = 'info@limpa.lv';
+        }
+
+        function saveBiz(){
+            const b = {
+                name: document.getElementById('bizName').value.trim() || 'Limpa',
+                reg: document.getElementById('bizReg').value.trim(),
+                vat: document.getElementById('bizVAT').value.trim(),
+                addr: document.getElementById('bizAddr').value.trim(),
+                phone: document.getElementById('bizPhone').value.trim()
+            };
+            localStorage.setItem(LS_BIZ, JSON.stringify(b));
+            const toast = new bootstrap.Toast(document.getElementById('successToast'));
+            document.querySelector('#successToast .toast-body').textContent = 'Company details saved locally.';
+            toast.show();
+            setTimeout(()=> document.querySelector('#successToast .toast-body').textContent = 'Thank you! This is a demo, messages are not actually sent.', 1600);
+        }
+
+        function loadProfileToInputs(){
+            const prof = loadProfile();
+            if (prof) {
+                document.getElementById('inputName').value = prof.name || '';
+                document.getElementById('inputEmail').value = prof.email || '';
+            }
+        }
+
+        function prefillFromProfile(){
+            loadProfileToInputs();
+            const toast = new bootstrap.Toast(document.getElementById('successToast'));
+            document.querySelector('#successToast .toast-body').textContent = 'Filled from saved profile (locally).';
+            toast.show();
+            setTimeout(()=> document.querySelector('#successToast .toast-body').textContent = 'Thank you! This is a demo, messages are not actually sent.', 1600);
+        }
+
+        function fakeSend(e){
+            e.preventDefault();
+            const toast = new bootstrap.Toast(document.getElementById('successToast'));
+            document.querySelector('#successToast .toast-body').textContent = 'Thank you! This is a demo, messages are not actually sent.';
+            toast.show();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = 'Sent ✓';
+            setTimeout(()=> { 
+                btn.disabled = false; 
+                btn.textContent = 'Send'; 
+            }, 2000);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            const main = document.getElementById("main");
+
+            sidebar.classList.toggle("hidden");
+            main.classList.toggle("full");
+        }
+    </script>
+</body>
+</html>

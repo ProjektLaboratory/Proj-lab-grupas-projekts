@@ -1,0 +1,5 @@
+{% extends "home.html" %}
+{% block content %}
+<h2>My Page</h2>
+<p>User info or settings go here.</p>
+{% endblock %}

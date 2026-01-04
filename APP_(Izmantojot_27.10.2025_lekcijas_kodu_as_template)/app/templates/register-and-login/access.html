@@ -425,7 +425,7 @@
         <div class="company-name">Limpa</div>
 
         <div class="user-info">
-            <a href="register.html" class="btn-outline-gradient">
+            <a href="/register" class="btn-outline-gradient">
                 <i class="fas fa-user-plus me-1"></i> Register
             </a>
         </div>
@@ -498,7 +498,7 @@
                             </div>
 
                             <div class="text-center mt-4">
-                                <p class="mb-0">Don't have an account? <a href="register.html" class="login-link">Create Account</a></p>
+                                <p class="mb-0">Don't have an account? <a href="/register" class="login-link">Create Account</a></p>
                             </div>
                         </form>
                     </div>
@@ -553,9 +553,11 @@
                 window.location.href = 'home.html';
             }
             */
+
             if (currentUser) {
                 //window.location.href = '/favourites';
                 window.location.href = '/home';
+                //<a href="/home"></a>
             }
 
 
@@ -618,10 +620,11 @@
                 window.location.href = 'home.html';
             }, 2000);
             */
-            if (currentUser) {
-            //    //window.location.href = '/favourites';
+            setTimeout(() => {
+                //window.location.href = '/favourites';
                 window.location.href = '/home';
-            }
+                //<a href="/home"></a>
+            }, 2000);
 
 
         }
@@ -702,6 +705,10 @@
                 window.location.href = 'index.html';
             }, 1500);
             */
+            setTimeout(() => {
+                window.location.href = '/home';
+                //<a href="/home"></a>
+            }, 1500);
 
 
         }

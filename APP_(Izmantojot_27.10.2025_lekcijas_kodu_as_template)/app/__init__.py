@@ -47,6 +47,9 @@ def create_app():
     from .web.home import home_bp
     app.register_blueprint(home_bp)
 
+    from .web.register import register_bp
+    app.register_blueprint(register_bp)
+
 
     # Register api endpoints
     from .api import api_bp

@@ -92,3 +92,7 @@ Menu "1"  -- "*" Dish
 ## Tehnoloģiju steks
 
 <img width="280" height="801" src="/tehnologiju_steks.png">
+
+## Plakāts par izveidoto projektu
+
+<img width="280" height="801" src="/plakats.png">

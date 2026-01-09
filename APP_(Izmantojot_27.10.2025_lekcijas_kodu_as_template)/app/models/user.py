@@ -6,7 +6,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     surname = db.Column(db.String(100), nullable=False)
-    favorites = db.relationship(
-        "FavoriteRecipe",
-        back_populates="recipes",
+    favourites = db.relationship(
+        "FavouriteRecipe",
+        #back_populates="recipes",
+        back_populates="user"
     )

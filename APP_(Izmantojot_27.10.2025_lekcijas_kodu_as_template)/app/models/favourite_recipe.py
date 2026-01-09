@@ -5,11 +5,13 @@ class FavouriteRecipe(db.Model):
     __tablename__ = "favourite_recipes"
     id = db.Column(db.Integer, primary_key=True)
     #title = db.Column(db.String(100), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipes.id"))
     user = db.relationship(
         "User",
-        back_populates="users",
+        back_populates="favourites",
     )
-    recipes = db.relationship(
+    recipe = db.relationship(
         "Recipe",
         back_populates="favourite_recipes",
     )

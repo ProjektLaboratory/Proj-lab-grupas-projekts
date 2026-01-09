@@ -1,20 +1,19 @@
 {% extends "Advancing.html" %}
 {% block content %}
 
-<div class="myDiv">
-    <h2>Welcome to Limpa</h2>
-    <p>Discover delicious recipes and culinary inspiration
-    aaaa</p>
-    <p>with our beautiful minimalistic design. Our platform</p>
-    <p>brings together food enthusiasts from around the</p>
-    <p>world to share and explore amazing dishes.</p>
-    <p> </p>
-    <p>Whether you're a professional chef or a home cook,</p>
-    <p>you'll find inspiration and community here.</p>
-    <p> </p>
-    <p>Get Started Today</p>
+<IMG SRC=”preview-welcome-page.png” ALIGN=”right” /> This text flows on the left.
+
+
+<div class="myDiv" style="width: 60%; float: left;">
+    <h2>Digitālā recepšu grāmata</h2>
+    <p>Sistēmas būtība</p>
+    <p> Limpa mērķis ir nodrošināt lietotājam vizuāli baudāmu vietni, kur rast idejas katram maltītes veidam, sniedzot visus nepieciešamos produktus, pagatavošanas soļus un iespēju saglabāt šīs maltītes nākamajai reizei!</p>
 </div>
 
-<IMG SRC=”preview-welcome-page.png” ALIGN=”right” /> This text flows on the left.
+<img src="{{ url_for('static', filename='preview-welcome-page.png') }}"
+     alt="Welcome preview"
+     style="width: 35%; float: right; margin-left: 20px;">
+
+<div style="clear: both;"></div>
 
 {% endblock %}

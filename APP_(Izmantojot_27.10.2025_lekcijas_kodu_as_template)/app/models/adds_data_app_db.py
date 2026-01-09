@@ -1,3 +1,5 @@
+import os
+import sys
 import pandas as pd
 from app import create_app
 from app.models.base import db
@@ -8,13 +10,19 @@ app = create_app()
 
 def load_data_from_excel():
     with app.app_context():
-        df_produkti = pd.read_excel('produkti.xlsx')
-        df_recipes = pd.read_excel('recipe.xlsx')
-
+        sys.stdout.reconfigure(encoding='utf-8')
+        #df_produkti = pd.read_excel('produkti.xlsx')
+        #df_recipes = pd.read_excel('recipe.xlsx')
+        BASE_DIR = os.path.dirname(__file__) 
+        df_produkti = pd.read_excel(os.path.join(BASE_DIR, 'produkti.xlsx')) 
+        df_recipes = pd.read_excel(os.path.join(BASE_DIR, 'recipe.xlsx'))
+        #print(df_produkti.columns.tolist())
+        #print(df_recipes.columns.tolist())
+        
         for _, row in df_produkti.iterrows():
-            exists = Ingredient.query.filter_by(name=row['Produkts']).first()
+            exists = Ingredient.query.filter_by(name=row['Produktu saraksts:']).first()
             if not exists:
-                jauns_ing = Ingredient(name=row['Produkts'])
+                jauns_ing = Ingredient(name=row['Produktu saraksts:'])
                 db.session.add(jauns_ing)
 
         for _, row in df_recipes.iterrows():

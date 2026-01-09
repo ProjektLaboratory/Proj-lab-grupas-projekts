@@ -36,3 +36,8 @@ class Recipe(db.Model):
         "FavouriteRecipe",
         back_populates="recipe"
     )
+    nutrients = db.relationship(
+        "NutritionalValues",
+        back_populates="recipe",
+        uselist=False
+    )

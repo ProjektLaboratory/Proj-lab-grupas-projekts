@@ -1,4 +1,5 @@
-{% extends "Advancing.html" %}
+{% extends "home.html" %}
+
 {% block content %}
 
 <h2 class="mb-4">Welcome {{ current_user.name }}</h2>
@@ -6,14 +7,24 @@
 
   <div class="col-md-2">
     <label class="form-label">Alergēni</label>
-    <input type="text" name="allergen" class="form-control" value="{{ allergen }}">
+    <select name="allergen" class="form-control">
+      <option value="">— Nav izvēlēts —</option>
+      <option value="piens">Piens</option>
+      <option value="olas">Olas</option>
+      <option value="zemesrieksti">Zemesrieksti</option>
+      <option value="rieksti">Rieksti</option>
+      <option value="soja">Soja</option>
+      <option value="kvieši">Kvieši</option>
+      <option value="zivs">Zivs</option>
+      <option value="jūras veltes">Jūras veltes</option>
+    </select>
   </div>
   
   <div class="col-md-2"> 
     <label class="form-label">Produkti</label>
     <input type="text" name="product" class="form-control" value="{{ product }}">
   </div>
-  
+
   <div class="col-md-2">
     <label class="form-label">Laiks</label>
     <input type="text" name="time" class="form-control" value="{{ time }}">
@@ -51,8 +62,15 @@
           </p>
 
           <p><strong>Recepte:</strong>
-            {{ r.instructions[:120] }}...
+            {{ r.instructions | map(attribute='name') | join(' ') }}
+            {{ r.instructions }}
           </p>
+
+
+          <p><strong>Kalorijas:</strong> {{ r.nutrients.kalorijas }}</p>
+          <p><strong>Olbaltumvielas:</strong> {{ r.nutrients.olbaltumvielas }}</p>
+          <p><strong>Tauki:</strong> {{ r.nutrients.tauki }}</p>
+          <p><strong>Ogļhidrāti:</strong> {{ r.nutrients.oglhidrati }}</p>
 
         </div>
       </div>

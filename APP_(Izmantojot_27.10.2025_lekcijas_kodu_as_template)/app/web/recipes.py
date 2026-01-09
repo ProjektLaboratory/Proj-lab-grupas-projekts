@@ -12,7 +12,7 @@ recipes_bp = Blueprint("recipes", __name__, url_prefix="/recipes")
 
 @recipes_bp.route("/", methods=["GET"])
 def index():
-    allergen = request.args.get("allergen", "")
+    allergen = request.args.get("allergen", "").strip().lower()
     product = request.args.get("product", "")
     time = request.args.get("time", "")
     cuisine = request.args.get("cuisine", "")
